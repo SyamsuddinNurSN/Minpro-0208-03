@@ -11,7 +11,7 @@ app.get("/api", (req, res) => {
   res.send("this is my API");
 });
 
-// const { userRouter } = require("./router");
+const { userRouter } = require("./router");
 app.use("/users", userRouter);
 
 app.listen(PORT, () => {
