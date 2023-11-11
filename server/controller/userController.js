@@ -1,3 +1,4 @@
+const db = require('../models');
 const express = require('express');
 const User = db.User
 const bcrypt = require('bcrypt');
@@ -9,7 +10,7 @@ module.exports ={
 // Endpoint untuk registrasi admin
 registerAdmin: async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const {fullname, username, email, password, role } = req.body;
 
     // Cek apakah admin sudah terdaftar
     const existingAdmin = await User.findOne({
@@ -25,8 +26,10 @@ registerAdmin: async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Membuat user admin baru
-    const newAdmin = await User.create({
+   await User.create({
+      fullname,
       username,
+      email,
       password: hashedPassword,
       role: 'admin',
     });
