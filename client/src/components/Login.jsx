@@ -36,28 +36,32 @@ export function LoginUser() {
 
   const handleSubmitLogin = async (data) => {
     try {
-      console.log( data, "ini data");
+      console.log(data, "ini data");
       if (data.data_input.includes("@")) {
         data.email = data.data_input;
         delete data.data_input;
-        const response = await axios.post(`http://localhost:2000/users/login`, data);
+        const response = await axios.post(
+          `http://localhost:2000/users/login`,
+          data
+        );
         setUser(response.data[0]);
         // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token)
-      navigate("/Home");
-      window.location.reload()
+        localStorage.setItem("token", response.data?.token);
+        navigate("/home");
+        window.location.reload();
       } else {
         data.username = data.data_input;
         delete data.data_input;
-        const response = await axios.post(`http://localhost:2000/users/login`, data);
+        const response = await axios.post(
+          `http://localhost:2000/users/login`,
+          data
+        );
         setUser(response.data[0]);
         // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token)
-      navigate("/Home");
-      window.location.reload()
+        localStorage.setItem("token", response.data?.token);
+        navigate("/home");
+        window.location.reload();
       }
-
-     
     } catch (err) {
       console.error(err);
 
@@ -96,7 +100,7 @@ export function LoginUser() {
         >
           <Stack spacing={4}>
             <Formik
-              initialValues={{ data_input: "", password: "",}}
+              initialValues={{ data_input: "", password: "" }}
               validationSchema={LoginSchema}
               onSubmit={(values, action) => {
                 handleSubmitLogin(values);

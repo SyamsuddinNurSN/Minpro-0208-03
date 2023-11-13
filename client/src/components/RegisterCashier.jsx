@@ -69,7 +69,7 @@ export const RegisterCashier = () => {
       //   isClosable: true,
       // });
 
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       console.log(err);
     }
