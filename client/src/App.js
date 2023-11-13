@@ -2,6 +2,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { WelcomePage } from "./pages/WelcomePage";
 import { LoginUser } from "./components/Login";
 import { RegisterUser } from "./components/Register";
+import { MenuPage } from "./pages/MenuPage";
+import { CreateProductPage } from "./pages/createProductPage";
+import { AdminPage } from "./pages/adminPage";
+
+
 import { Profile } from "./components/Profile/Profile";
 import EditProfilePage from "./components/Profile/EditProfile";
 import HomePage from "./pages/HomePage";
@@ -15,12 +20,16 @@ import axios from "axios";
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
   { path: "/register", element: <RegisterUser /> },
+  { path: "/login", element: <LoginUser /> },
+  { path: "/menu", element: <MenuPage /> },
+  { path: "/create-product", element: <CreateProductPage /> },
+  { path: "/admin", element: <AdminPage /> },
   { path: "/register-cashier", element: <RegisterCashier /> },
   { path: "/login", element: <LoginUser /> },
   { path: "/profile", element: <Profile /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
   { path: "/", element: <WelcomePage /> }, // Default route
-]);
+])
 
 function App() {
   const token = localStorage.getItem("token");
@@ -40,17 +49,22 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  useEffect(() => {
+    
+    useEffect(() => {
     keepLogin();
   }, []);
-
-  return (
+    
+    return (
     <>
       <RouterProvider router={router} />
     </>
   );
+    
+  };
+
+  
+
+  
 }
 
 export default App;
