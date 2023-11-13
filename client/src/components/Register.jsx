@@ -19,7 +19,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import loginimage from "../asset/TASmart.png"
 import { Link, useNavigate } from "react-router-dom";
 
 export const RegisterUser = () => {
@@ -76,6 +76,14 @@ export const RegisterUser = () => {
         bg={useColorModeValue("gray.50", "gray.800")}
       >
         <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
+          <Stack align={"center"}>
+            <Link to={"/"}>
+              <Image src={loginimage} w="60px" h="60px" objectFit="cover" alt="Logo TASmart" />
+            </Link>
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              DAFTAR
+            </Heading>
+          </Stack>
           <Formik
             initialValues={{
               fullname: "",
@@ -245,10 +253,10 @@ export const RegisterUser = () => {
                       <Stack spacing={10} pt={2}>
                         <Button
                           type="submit"
-                          bgGradient="linear(to-r, #000000, rgb(16, 69, 181))"
+                          bgGradient="linear(to-r, #4000, rgb(16, 69, 400))"
                           loadingText="Submitting"
                           size="lg"
-                          color={"white"}
+                          color={"black"}
                           _hover={{}}
                         >
                           Daftar

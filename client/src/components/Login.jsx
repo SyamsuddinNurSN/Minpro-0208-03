@@ -10,6 +10,8 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  Image,
+  VStack,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -18,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { setData } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import loginimage from "../asset/TASmart.png";
 
 export function LoginUser() {
   const LoginSchema = Yup.object().shape({
@@ -36,28 +39,32 @@ export function LoginUser() {
 
   const handleSubmitLogin = async (data) => {
     try {
-      console.log( data, "ini data");
+      console.log(data, "ini data");
       if (data.data_input.includes("@")) {
         data.email = data.data_input;
         delete data.data_input;
-        const response = await axios.post(`http://localhost:2000/users/login`, data);
+        const response = await axios.post(
+          `http://localhost:2000/users/login`,
+          data
+        );
         setUser(response.data[0]);
         // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token)
-      navigate("/Home");
-      window.location.reload()
+        localStorage.setItem("token", response.data?.token);
+        navigate("/Home");
+        window.location.reload();
       } else {
         data.username = data.data_input;
         delete data.data_input;
-        const response = await axios.post(`http://localhost:2000/users/login`, data);
+        const response = await axios.post(
+          `http://localhost:2000/users/login`,
+          data
+        );
         setUser(response.data[0]);
         // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token)
-      navigate("/Home");
-      window.location.reload()
+        localStorage.setItem("token", response.data?.token);
+        navigate("/Home");
+        window.location.reload();
       }
-
-     
     } catch (err) {
       console.error(err);
 
@@ -81,11 +88,14 @@ export function LoginUser() {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Masuk ke Akun anda</Heading>
+          <Link to={"/"}>
+            <Image src={loginimage} w="60px" h="60px" objectFit="cover" alt="Logo TASmart" />
+          </Link>
+          <Heading fontSize={"4xl"}>Masukkan Akun anda</Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
-            Rasakan kemudahan dengan semua fitur canggih kami ✨
+            Selamat Datang di TASmart 👋😁
           </Text>
         </Stack>
         <Box
@@ -96,7 +106,7 @@ export function LoginUser() {
         >
           <Stack spacing={4}>
             <Formik
-              initialValues={{ data_input: "", password: "",}}
+              initialValues={{ data_input: "", password: "" }}
               validationSchema={LoginSchema}
               onSubmit={(values, action) => {
                 handleSubmitLogin(values);
@@ -158,23 +168,39 @@ export function LoginUser() {
                           style={{ color: "red" }}
                         />
                       </FormControl> */}
-                      <Stack spacing={10}>
-                        <Stack
-                          direction={{ base: "column", sm: "row" }}
-                          align={"start"}
+                      <Stack spacing={10} mt="5">
+                        <Flex
+                          direction={{ base: "column", sm: "column" }}
+                          align="stretch"
                           justify={"space-between"}
+                          gap="3"
                         >
-                          <Text align={"center"}>Belum punya akun? </Text>
-                          <Text>
-                            <Text as={Link} to="/register" color={"red.400"}>
-                              Daftar
+                          <Flex justify={"space-between"}>
+                            <Text align={"center"}>Lupa password? </Text>
+                            <Text>
+                              <Text
+                                as={Link}
+                                to="/resetpassword"
+                                color={"blue.400"}
+                              >
+                                Reset
+                              </Text>
                             </Text>
-                          </Text>
-                        </Stack>
+                          </Flex>
+
+                          <Flex justify={"space-between"}>
+                            <Text align={"center"}>Belum punya akun? </Text>
+                            <Text>
+                              <Text as={Link} to="/register" color={"blue.400"}>
+                                Daftar
+                              </Text>
+                            </Text>
+                          </Flex>
+                        </Flex>
                         <Button
                           type="submit"
-                          bgGradient="linear(to-r, #000000, #FF0000)"
-                          color={"white"}
+                          bgGradient="linear(to-r,rgb(16, 69, 181), #fff)"
+                          color={"black"}
                           _hover={{}}
                         >
                           Masuk

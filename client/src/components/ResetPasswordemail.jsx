@@ -34,18 +34,13 @@ const ResetPasswordForm = () => {
       <Form>
         <Box p={4}>
           
-          <FormControl id="newPassword" isRequired>
-            <FormLabel>New Password</FormLabel>
-            <Field as={Input} type="password" name="newPassword" />
-            <ErrorMessage name="newPassword" component={FormErrorMessage} />
-          </FormControl>
-          <FormControl id="confirmPassword" isRequired>
-            <FormLabel>Confirm Password</FormLabel>
-            <Field as={Input} type="password" name="confirmPassword" />
-            <ErrorMessage name="confirmPassword" component={FormErrorMessage} />
+        <FormControl id="email" isRequired>
+            <FormLabel>Email</FormLabel>
+            <Field as={Input} type="email" name="email" />
+            <ErrorMessage name="email" component={FormErrorMessage} />
           </FormControl>
           <Button mt={4} colorScheme="teal" type="submit">
-            Reset Password
+            Kirim
           </Button>
         </Box>
       </Form>

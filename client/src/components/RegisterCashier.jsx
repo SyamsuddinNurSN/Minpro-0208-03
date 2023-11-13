@@ -253,10 +253,10 @@ export const RegisterCashier = () => {
                       <Stack spacing={10} pt={2}>
                         <Button
                           type="submit"
-                          bgGradient="linear(to-r, #000000, rgb(16, 69, 181))"
+                          bgGradient="linear(to-r, #4000, rgb(16, 69, 400))"
                           loadingText="Submitting"
                           size="lg"
-                          color={"white"}
+                          color={"black"}
                           _hover={{}}
                         >
                           Daftar

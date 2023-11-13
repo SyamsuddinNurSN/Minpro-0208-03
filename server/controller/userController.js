@@ -39,7 +39,7 @@ module.exports = {
       res.status(201).json({ message: "Admin registered successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(400).json({ error: "Internal Server Error" });
     }
   },
 
@@ -176,5 +176,26 @@ module.exports = {
       res.status(400).send({ message: error.message });
     }
   },
+  resetPassword:  async (req, res) => {
+    try {
+      const data = fs.readFileSync("./template.html", "utf-8");
+      const tempCompile = await handlebars.compile(data);
+      const tempResult = tempCompile({
+        createdAt: result.createdAt,
+        name: name,
+        username: username,
+      });
+
+      await transporter.sendMail({
+        from: "amanhidayat39@gmail.com",
+        to: email,
+        subject: "Email Confirmation",
+        html: tempResult,
+      });
+      
+    } catch (error) {
+      
+    }
+  }
 
 };

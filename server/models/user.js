@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasOne(models.Cashier)
+      
     }
   }
   User.init({
@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     username: { type: DataTypes.STRING, allowNull: false },
     email: { type:DataTypes.STRING, allowNull: false },
     password: { type:DataTypes.STRING, allowNull: false },
-    role: { type: DataTypes.ENUM('admin', 'cashier'), allowNull: false}
+    role: { type: DataTypes.ENUM('admin', 'cashier'), allowNull: false},
+    imgprofile: { type: DataTypes.STRING, allowNull: true}
   }, {
     sequelize,
     modelName: 'User',

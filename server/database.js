@@ -4,8 +4,8 @@ const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize({
     "username": "root",
-    "password": "Isam26798@",
-    "database": "cashier_app",
+    "password": "123456a",
+    "database": "tasmart",
     "host": "127.0.0.1",
     "dialect": "mysql"
   });
