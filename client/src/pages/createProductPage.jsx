@@ -22,9 +22,8 @@ import {
 } from "@chakra-ui/react";
 import SimpleSidebar from "../components/sidebarLeft";
 
-import avaDummy from "../assets/ava-dummy.png";
-import { CiSettings } from "react-icons/ci";
 import { IoCreateOutline } from "react-icons/io5";
+import { UserBarInfo } from "../components/userBarInfo";
 
 const categoryOption = [
   { name: "All" },
@@ -45,7 +44,6 @@ export const CreateProductPage = () => {
     <>
       <SimpleSidebar />
       <Flex
-        templateColumns="repeat(9, 1fr)"
         pl={{ base: "0", lg: "3.8vw" }}
         // h="100vh"
         bg="#F9F8FB"
@@ -198,45 +196,15 @@ export const CreateProductPage = () => {
           </Flex>
         </VStack>
         {/* Right bar */}
-        <Flex pr="6" py="7" w="full" justifyContent="start" ml="6">
-          <Flex flexDirection={"column"}>
-            {/* User */}
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              w="full"
-              gap={7}
-              p="4"
-              bg="white"
-              borderRadius="xl"
-            >
-              <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
-              <Flex
-                flexDirection="column"
-                justifyContent="start"
-                alignItems="start"
-              >
-                <Text color="#717171" fontSize="0.9rem">
-                  I'm a Cashier
-                </Text>
-                <Text fontWeight="semibold">John Doe</Text>
-              </Flex>
-              <Flex flexGrow="1" justifyContent="end" h="full">
-                <Icon
-                  as={CiSettings}
-                  h="3rem"
-                  w="3rem"
-                  p="0.4rem"
-                  textColor="#A4A4A4"
-                  _hover={{
-                    bg: "#4D81F1",
-                    color: "white",
-                  }}
-                  rounded="lg"
-                />
-              </Flex>
-            </Flex>
-          </Flex>
+        <Flex
+          pr="6"
+          py="7"
+          w="full"
+          justifyContent="start"
+          ml="6"
+          display={{ base: "hidden", lg: "block" }}
+        >
+          <UserBarInfo />
         </Flex>
       </Flex>
     </>
