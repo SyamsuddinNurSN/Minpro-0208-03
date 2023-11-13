@@ -7,11 +7,15 @@ import {
   Spacer,
   Avatar,
   Link as ChakraLink,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Navbar = ({ isAuthenticated }) => {
+const Navbar = () => {
   const user = useSelector((state) => state.user.value);
   console.log(user);
   const id = user.id;
@@ -62,18 +66,17 @@ const Navbar = ({ isAuthenticated }) => {
           </>
         ) : (
             <>
-            <Box>
+            <Menu>
+            <MenuButton>
               <Avatar size="sm" name={user.username} />
-            </Box>
-            <Box ml={2}>
-              <Button
-                colorScheme="red"
-                borderColor="red"
-                onClick={handleLogout}
-              >
-                Sign Out
-              </Button>
-            </Box>
+            </MenuButton>
+            <MenuList>
+            <Link to="/profile">
+                  <MenuItem>Your Profile</MenuItem>
+                </Link>
+              <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+            </MenuList>
+          </Menu>
           </>
         )
     }

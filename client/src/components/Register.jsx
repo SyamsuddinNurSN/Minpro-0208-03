@@ -61,7 +61,7 @@ export const RegisterUser = () => {
       //   isClosable: true,
       // });
 
-      navigate("/home");
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }
