@@ -1,13 +1,33 @@
 // src/components/Navbar.js
-import React from "react";
-import { Box, Button, Flex, Spacer, Avatar, Link as ChakraLink } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import {
+  Box,
+  Button,
+  Flex,
+  Spacer,
+  Avatar,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Navbar = ({ isAuthenticated }) => {
+  const user = useSelector((state) => state.user.value);
+  console.log(user);
+  const id = user.id;
+  const checkUser = () => {
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  useEffect(() => {
+    checkUser();
+  });
+
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.value)
-console.log(user);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
@@ -25,18 +45,7 @@ console.log(user);
           </Link>
         </Box>
         <Spacer />
-        {isAuthenticated ? (
-          <>
-            <Box>
-              <Avatar size="sm" name={user.username} />
-            </Box>
-            <Box ml={2}>
-              <Button colorScheme="red" borderColor="red" onClick={handleLogout}>
-                Sign Out
-              </Button>
-            </Box>
-          </>
-        ) : (
+        {!id ? (
           <>
             <Box>
               <Link to="/login">
@@ -51,7 +60,23 @@ console.log(user);
               </Link>
             </Box>
           </>
-        )}
+        ) : (
+            <>
+            <Box>
+              <Avatar size="sm" name={user.username} />
+            </Box>
+            <Box ml={2}>
+              <Button
+                colorScheme="red"
+                borderColor="red"
+                onClick={handleLogout}
+              >
+                Sign Out
+              </Button>
+            </Box>
+          </>
+        )
+    }
       </Flex>
     </Box>
   );

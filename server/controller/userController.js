@@ -162,19 +162,19 @@ module.exports = {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  // keepLogin: async (req, res) => {
-  //   try {
-  //     const result = await User.findOne({
-  //       where: {
-  //         id: req.user.id,
-  //       },
-  //     });
-  //     console.log(result);
-  //     res.status(200).send(result);
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(400).send({ message: error.message });
-  //   }
-  // },
+  keepLogin: async (req, res) => {
+    try {
+      const result = await User.findOne({
+        where: {
+          id: req.user.id,
+        },
+      });
+      console.log(result);
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ message: error.message });
+    }
+  },
 
 };

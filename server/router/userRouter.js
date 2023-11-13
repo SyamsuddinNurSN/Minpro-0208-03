@@ -16,6 +16,6 @@ router.post(
 );
 router.post("/login", userController.login);
 // router.get("/", userController.getAll)
-// router.get("/keep-login", verifyToken, userController.keepLogin)
+router.get("/keep-login", verifyToken, userController.keepLogin)
 
 module.exports = router;
