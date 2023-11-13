@@ -22,7 +22,7 @@ import * as Yup from "yup";
 
 import { Link, useNavigate } from "react-router-dom";
 
-export const RegisterUser = () => {
+export const RegisterCashier = () => {
   const RegisterSchema = Yup.object().shape({
     fullname: Yup.string().required("Nama tidak boleh kosong"),
     username: Yup.string().required("Username tidak boleh kosong"),
@@ -38,9 +38,9 @@ export const RegisterUser = () => {
         "Password harus sama dengan konfirmasi password"
       ) // Validasi konfirmasi password
       .required("Confirm Password tidak boleh kosong"),
-      role: Yup.string()
-    .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
-    .required("Tipe pengguna tidak boleh kosong"),
+    role: Yup.string()
+      .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
+      .required("Tipe pengguna tidak boleh kosong"),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -48,11 +48,19 @@ export const RegisterUser = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const handleSubmitRegister = async (data) => {
+  const RegisterCashier = async (data) => {
     try {
-      console.log( data, "ini data");
-      await axios.post("http://localhost:2000/users", data);
-      
+        const token = localStorage.getItem("token")
+        console.log(token);
+      console.log(data, "ini data");
+      await axios.post("http://localhost:2000/users/cashiers", data,
+      {
+        headers :{
+            Authorization: `Bearer ${token}`
+          }
+      }
+      );
+
       // toast({
       //   title: "Akun Telah Dibuat",
       //   description: "Anda sekarang dapat menggunakan akun Anda.",
@@ -61,7 +69,7 @@ export const RegisterUser = () => {
       //   isClosable: true,
       // });
 
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -82,11 +90,11 @@ export const RegisterUser = () => {
               username: "",
               email: "",
               password: "",
-              role: "admin",
+              role: "cashier",
             }}
             validationSchema={RegisterSchema}
             onSubmit={(values, action) => {
-              handleSubmitRegister(values);
+              RegisterCashier(values);
               action.resetForm();
             }}
           >
@@ -109,7 +117,7 @@ export const RegisterUser = () => {
                             )}
                           </Field>
                           <ErrorMessage
-                            name="name"
+                            name="fullname"
                             component="div"
                             style={{ color: "red" }}
                           />
@@ -254,14 +262,7 @@ export const RegisterUser = () => {
                           Daftar
                         </Button>
                       </Stack>
-                      <Stack pt={6}>
-                        <Text align={"center"}>
-                          Apakah sudah punya Akun?{" "}
-                          <Text as={Link} to="/login" color={"blue.400"}>
-                            Masuk
-                          </Text>
-                        </Text>
-                      </Stack>
+                     
                     </Stack>
                   </Box>
                 </Form>

@@ -1,15 +1,21 @@
+// Example router configuration
+
 const router = require("express").Router();
+
+// Your router configuration...
+
 const { userController } = require("../controller");
-// const { verifyToken } = require("../middleware/auth");
+const { checkRole, verifyToken } = require("../middleware/auth");
 
 router.post("/", userController.registerAdmin);
-router.post("/login", userController.loginAdmin);
-// router.get("/", userController.getAll);
+router.post(
+  "/cashiers",
+  verifyToken,
+  checkRole,
+  userController.registerCashier
+);
+router.post("/login", userController.login);
+// router.get("/", userController.getAll)
 // router.get("/keep-login", verifyToken, userController.keepLogin)
-// router.get("/:id", userController.getById);
-// router.delete("/:id", userController.deleteUser);
-// router.patch("/", verifyToken, userController.editUser);
-// router.patch("/change-pass", verifyToken, userController.editPassword);
-
 
 module.exports = router;
