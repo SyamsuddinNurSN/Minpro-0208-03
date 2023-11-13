@@ -12,32 +12,30 @@ import {
   
   export const WelcomePage = () => {
     return (
-      <Flex
-        flex="1"
-        flexDirection="column"
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
         h="100vh"
-        justify="center"
-        align="center"
-        bg="gray.100"
+        bgGradient="linear(to-r, teal.500, blue.500)"
+        color="white"
+        textAlign="center"
+        padding="4"
       >
-        <Stack spacing={5} maxW={"md"} w={"full"} p={4} bg="white" rounded="md" boxShadow="md">
-          <Heading fontSize="2xl">Selamat Datang!</Heading>
-          <Text>
-            Selamat datang di aplikasi kami. Jika Anda sudah memiliki akun, silakan masuk. Jika belum, Anda dapat mendaftar.
+        <Box>
+          <Heading fontSize="4xl" mb="4">
+            Selamat Datang di Tasmart
+          </Heading>
+          <Text fontSize="lg" mb="8">
+            Cashier app andalan anda
           </Text>
-          <Link to="/register">
-            <Button colorScheme="blue" size="md">
-              Daftar
-            </Button>
-          </Link>
-          <Text>Atau</Text>
           <Link to="/login">
-            <Button colorScheme="green" size="md">
-              Masuk
+            <Button colorScheme="yellow" size="lg">
+              Mulai Petualangan Anda
             </Button>
           </Link>
-        </Stack>
-      </Flex>
+        </Box>
+      </Box>
     );
   };
   
