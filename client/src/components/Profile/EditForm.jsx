@@ -1,19 +1,29 @@
-// EditProfileForm.js
-import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
+
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 
 const EditProfileForm = ({ initialValues, onSubmit }) => {
-  const validationSchema = Yup.object().shape({
-    nama: Yup.string().required('Nama wajib diisi'),
-    username: Yup.string().required('Username wajib diisi'),
-    email: Yup.string().email('Format email tidak valid').required('Email wajib diisi'),
+  const updateSchema = Yup.object().shape({
+    fullname: Yup.string(),
+    username: Yup.string(),
+    profile_picture: Yup.mixed().test('fileSize', 'Ukuran foto terlalu besar (maks 2 MB)', (value) => {
+      if (!value) return true; // Allow empty file (user might not want to change the photo)
+      return value.size <= 2 * 1024 * 1024; // 2 MB
+    }),
   });
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    updateSchema,
     onSubmit,
   });
 
@@ -26,50 +36,51 @@ const EditProfileForm = ({ initialValues, onSubmit }) => {
       borderWidth={1}
       borderRadius={8}
       boxShadow="lg"
-      bg="white" 
+      bg="white"
     >
       <form onSubmit={formik.handleSubmit}>
-        <FormControl id="nama" isInvalid={formik.touched.nama && formik.errors.nama}>
-          <FormLabel>Nama</FormLabel>
+        <FormControl id="fullname">
+          <FormLabel>Fullname</FormLabel>
           <Input
             type="text"
-            name="nama"
-            placeholder='Masukkan nama Anda'
+            name="fullname"
+            placeholder="Masukkan fullname Anda"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.nama}
+            value={formik.values.fullname}
           />
-          <FormErrorMessage>{formik.errors.nama}</FormErrorMessage>
         </FormControl>
 
-        <FormControl id="username" mt={4} isInvalid={formik.touched.username && formik.errors.username}>
+        <FormControl id="username" mt={4}>
           <FormLabel>Username</FormLabel>
           <Input
             type="text"
             name="username"
-            placeholder='Pilih username Anda'
+            placeholder="Pilih username Anda"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.username}
           />
-          <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
         </FormControl>
 
-        <FormControl id="email" mt={4} isInvalid={formik.touched.email && formik.errors.email}>
-          <FormLabel>Email</FormLabel>
+        <FormControl id="profile_picture" mt={4} isInvalid={formik.touched.photo && formik.errors.photo}>
+        <FormLabel>Profile Picture</FormLabel>
           <Input
-            type="email"
-            name="email"
-            placeholder='Masukkan alamat email Anda'
-            onChange={formik.handleChange}
+            type="file"
+            name="profile_picture"
+            onChange={(event) => formik.setFieldValue('profile_picture', event.currentTarget.files[0])}
             onBlur={formik.handleBlur}
-            value={formik.values.email}
+            // value={formik.values.profile_picture}
           />
-          <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+          <FormErrorMessage>{formik.errors.profile_picture}</FormErrorMessage>
         </FormControl>
 
         <Box mt={6}>
-          <Button type="submit" colorScheme="blue" isLoading={formik.isSubmitting}>
+          <Button
+            type="submit"
+            colorScheme="blue"
+            isLoading={formik.isSubmitting}
+          >
             Simpan Perubahan
           </Button>
         </Box>

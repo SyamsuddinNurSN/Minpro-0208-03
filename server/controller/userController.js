@@ -4,7 +4,8 @@ const Cashier = db.Cashier;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Sequelize } = require("sequelize");
-const sequelize = require("../database");
+const path = require("path")
+
 
 // Import model atau koneksi database yang diperlukan
 
@@ -116,8 +117,6 @@ module.exports = {
   },
 
   registerCashier: async (req, res) => {
-    const t = await sequelize.transaction();
-
     try {
       const { fullname, username, email, password, role } = req.body;
 
@@ -125,34 +124,13 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Create a new user with the role "cashier"
-      const newUser = await User.create(
-        {
-          fullname,
-          username,
-          email,
-          password: hashedPassword,
-          role: "cashier",
-        },
-        { transaction: t }
-      );
-
-      // Find the maximum CashierId from existing Cashier records
-      const maxCashierId = await Cashier.max("id", { transaction: t });
-
-      // Increment the maximum CashierId by 1 for the new cashier
-      const newCashierId = maxCashierId ? maxCashierId + 1 : 1;
-
-      // Create a new cashier connected to the new user
-      const newCashier = await Cashier.create(
-        {
-          id: newCashierId,
-          UserId: newUser.id,
-        },
-        { transaction: t }
-      );
-
-      // Commit transaksi jika semuanya berhasil
-      await t.commit();
+      const newUser = await User.create({
+        fullname,
+        username,
+        email,
+        password: hashedPassword,
+        role: "cashier",
+      });
 
       res.status(201).json({ message: "Cashier created successfully" });
     } catch (error) {
@@ -176,5 +154,25 @@ module.exports = {
       res.status(400).send({ message: error.message });
     }
   },
-
+  editProfile: async (req, res) => {
+    try {
+      const { fullname, username } = req.body
+      await User.update({
+        fullname,
+        username,
+        profile_picture: req.file?.path
+      },
+        
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      );
+      res.status(200).send("Profile Updated");
+    } catch (error) {
+      console.log(err);
+      res.status(400).send({ err: err.message });
+    }
+  },
 };
