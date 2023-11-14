@@ -34,7 +34,7 @@ const router = createBrowserRouter([
 function App() {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const keepLogin = async () => {
+  const KeepLogin = async () => {
     try {
       const response = await axios.get(
         `http://localhost:2000/users/keep-login`,
@@ -51,16 +51,16 @@ function App() {
     }
     
     useEffect(() => {
-    keepLogin();
+    KeepLogin();
   }, []);
-    
+}
     return (
     <>
       <RouterProvider router={router} />
     </>
   );
     
-  };
+  ;
 
   
 
