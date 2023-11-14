@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   const user = useSelector((state) => state.user.value);
   console.log(user);
+  const profilePicture = user.profile_picture
   const id = user.id;
   const checkUser = () => {
     if (user) {
@@ -65,21 +66,23 @@ const Navbar = () => {
             </Box>
           </>
         ) : (
-            <>
+          <>
             <Menu>
-            <MenuButton>
-              <Avatar size="sm" name={user.username} />
-            </MenuButton>
-            <MenuList>
-            <Link to="/profile">
+              <MenuButton>
+                <Avatar
+                  size="md"
+                  src={`http://localhost:2000/${profilePicture}`}
+                />
+              </MenuButton>
+              <MenuList>
+                <Link to="/profile">
                   <MenuItem>Your Profile</MenuItem>
                 </Link>
-              <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
-            </MenuList>
-          </Menu>
+                <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+              </MenuList>
+            </Menu>
           </>
-        )
-    }
+        )}
       </Flex>
     </Box>
   );
