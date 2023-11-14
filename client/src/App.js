@@ -49,22 +49,18 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-    
+  };
+
     useEffect(() => {
     KeepLogin();
   }, []);
-}
+
     return (
     <>
       <RouterProvider router={router} />
     </>
   );
     
-  ;
-
-  
-
-  
 }
 
 export default App;
