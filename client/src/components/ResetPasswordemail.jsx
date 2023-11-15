@@ -1,49 +1,76 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { Box, FormControl, FormLabel, Input, FormErrorMessage, Button } from '@chakra-ui/react';
-import axios from 'axios'; // Import Axios
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  Button,
+} from "@chakra-ui/react";
+import axios from "axios"; // Import Axios
 
 const ResetPasswordForm = () => {
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values) => {
+    console.log(values);
     try {
       // Kirim permintaan reset password ke backend
-      const response = await axios.post('/api/reset-password', values);
+      const response = await axios.post("http://localhost:2000/users/reset-password", values);
       // Handle respon dari server jika diperlukan
-      console.log('Password reset success:', response.data);
+      console.log("Password reset success:", response.data);
     } catch (error) {
       // Handle kesalahan jika ada
-      console.error('Password reset error:', error);
-    } finally {
-      setSubmitting(false);
+      console.error("Password reset error:", error);
     }
   };
 
   return (
     <Formik
-      initialValues={{ email: '', newPassword: '', confirmPassword: '' }}
+      initialValues={{ email: "" }}
       validationSchema={Yup.object({
-        email: Yup.string().email('Invalid email address').required('Required'),
-        newPassword: Yup.string().required('Required'),
-        confirmPassword: Yup.string()
-          .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-          .required('Required'),
+        email: Yup.string().email("Invalid email address").required("Required"),
       })}
       onSubmit={handleSubmit}
     >
-      <Form>
-        <Box p={4}>
-          
-        <FormControl id="email" isRequired>
-            <FormLabel>Email</FormLabel>
-            <Field as={Input} type="email" name="email" />
-            <ErrorMessage name="email" component={FormErrorMessage} />
-          </FormControl>
-          <Button mt={4} colorScheme="teal" type="submit">
-            Kirim
-          </Button>
-        </Box>
-      </Form>
+      {(props) => {
+        return (
+          <>
+            <Form>
+              <Box
+                p={4}
+                borderWidth="1px"
+                borderRadius="md"
+                width="300px"
+                margin="auto"
+              >
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email</FormLabel>
+                  <Field name="email">
+                            {({ field }) => (
+                              <Input
+                                {...field}
+                                type="text"
+                                placeholder="Email"
+                                autoComplete="new"
+                              />
+                            )}
+                          </Field>
+                          <ErrorMessage
+                            name="email"
+                            component="div"
+                            style={{ color: "red" }}
+                          />
+                  
+                </FormControl>
+                <Button mt={4} colorScheme="blue" type="submit" width="100%">
+                  Kirim
+                </Button>
+              </Box>
+            </Form>
+          </>
+        );
+      }}
     </Formik>
   );
 };

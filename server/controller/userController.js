@@ -5,6 +5,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../database");
+const { create } = require("handlebars");
+const transporter = require("../middleware/transporter");
+const fs = require("fs");
+const handlebars = require("handlebars");
 
 // Import model atau koneksi database yang diperlukan
 
@@ -104,6 +108,21 @@ module.exports = {
         // Lakukan apa yang diperlukan untuk cashier
       }
 
+      // const data = fs.readFileSync("./resetpassword.html", "utf-8");
+      //   const tempCompile = await handlebars.compile(data);
+      //   const tempResult = tempCompile({
+      //     createdAt: result.createdAt,
+      //     name: name,
+      //     username: username,
+      //   });
+
+        // await transporter.sendMail({
+        //   from: "amanhidayat39@gmail.com",
+        //   to: email,
+        //   subject: "Email Confirmation",
+        //   html: tempResult,
+        // });
+
       res.status(200).json({
         message: "logged in successfully",
         result: isUserExist,
@@ -133,32 +152,30 @@ module.exports = {
           password: hashedPassword,
           role: "cashier",
         },
-        { transaction: t }
+        
       );
 
-      // Find the maximum CashierId from existing Cashier records
-      const maxCashierId = await Cashier.max("id", { transaction: t });
+      const data = fs.readFileSync("./verifiedakun.html", "utf-8");
+        const tempCompile = await handlebars.compile(data);
+        const tempResult = tempCompile({
+          createdAt: result.createdAt,
+          name: name,
+          username: username,
+        });
 
-      // Increment the maximum CashierId by 1 for the new cashier
-      const newCashierId = maxCashierId ? maxCashierId + 1 : 1;
+        await transporter.sendMail({
+          from: "amanhidayat39@gmail.com",
+          to: email,
+          subject: "Email Confirmation",
+          html: tempResult,
+        });
 
-      // Create a new cashier connected to the new user
-      const newCashier = await Cashier.create(
-        {
-          id: newCashierId,
-          UserId: newUser.id,
-        },
-        { transaction: t }
-      );
-
-      // Commit transaksi jika semuanya berhasil
-      await t.commit();
+        
 
       res.status(201).json({ message: "Cashier created successfully" });
     } catch (error) {
       console.error(error);
-      // Rollback transaksi jika terjadi kesalahan
-      await t.rollback();
+      
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
@@ -177,13 +194,15 @@ module.exports = {
     }
   },
   resetPassword:  async (req, res) => {
+    
     try {
-      const data = fs.readFileSync("./template.html", "utf-8");
+      console.log(`ini req body`,req.body);
+      const { email} = req.body
+      const data = fs.readFileSync("./resetpassword.html", "utf-8");
       const tempCompile = await handlebars.compile(data);
       const tempResult = tempCompile({
-        createdAt: result.createdAt,
-        name: name,
-        username: username,
+       email: email, link: `http://localhost:3000/resetpassword/${email}`
+
       });
 
       await transporter.sendMail({
@@ -194,8 +213,11 @@ module.exports = {
       });
       
     } catch (error) {
-      
+      console.log(error);
     }
+
+
+
   }
 
 };

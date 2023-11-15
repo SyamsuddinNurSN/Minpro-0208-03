@@ -125,7 +125,7 @@ export function LoginUser() {
                               {...field}
                               type="text"
                               placeholder="Email/Username"
-                              autoComplete="new"
+                              autoComplete="off"
                             />
                           )}
                         </Field>
@@ -180,7 +180,7 @@ export function LoginUser() {
                             <Text>
                               <Text
                                 as={Link}
-                                to="/resetpassword"
+                                to="/resetpasswordemail"
                                 color={"blue.400"}
                               >
                                 Reset
@@ -188,14 +188,7 @@ export function LoginUser() {
                             </Text>
                           </Flex>
 
-                          <Flex justify={"space-between"}>
-                            <Text align={"center"}>Belum punya akun? </Text>
-                            <Text>
-                              <Text as={Link} to="/register" color={"blue.400"}>
-                                Daftar
-                              </Text>
-                            </Text>
-                          </Flex>
+                          
                         </Flex>
                         <Button
                           type="submit"

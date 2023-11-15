@@ -7,7 +7,9 @@ const router = require("express").Router();
 const { userController } = require("../controller");
 const { checkRole, verifyToken } = require("../middleware/auth");
 
+
 router.post("/", userController.registerAdmin);
+router.post("/reset-password", userController.resetPassword);
 router.post(
   "/cashiers",
   verifyToken,
