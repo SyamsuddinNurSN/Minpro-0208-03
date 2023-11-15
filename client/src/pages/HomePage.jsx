@@ -1,10 +1,26 @@
 // src/WelcomePage.js
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Heading, Text, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/NavBar";
+import { useSelector } from "react-redux";
 
 function HomePage() {
+
+    const user = useSelector((state) => state.user.value);
+    console.log(user.role);
+    const admin = user.role === "admin";
+    const checkUser = () => {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    useEffect(() => {
+      checkUser();
+    });
+
   return (
     <>
       <Navbar />
@@ -27,11 +43,11 @@ function HomePage() {
             Terima kasih telah mengunjungi halaman kami. Kami siap memberikan
             pengalaman yang luar biasa untuk Anda.
           </Text>
-          <Link to="/register-cashier">
-            <Button colorScheme="yellow" size="lg">
-              Register your cashier
-            </Button>
-          </Link>
+        {(admin &&<Link to="/register-cashier">
+        <Button colorScheme="yellow" size="lg">
+            Register your cashier
+        </Button>
+        </Link>)}
         </Box>
       </Box>
     </>

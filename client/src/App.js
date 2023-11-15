@@ -41,7 +41,8 @@ function App() {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
 
-  const keepLogin = async () => {
+  const KeepLogin = async () => {
+
     try {
       const response = await axios.get(
         `http://localhost:2000/users/keep-login`,
@@ -56,21 +57,19 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-  };
 
-  useEffect(() => {
-    keepLogin();
+  }
+  
+    useEffect(() => {
+    KeepLogin();
   }, []);
+  
+    return (
 
-  return (
     <>
       <RouterProvider router={router} />
     </>
   );
-
-
-
-
 
 }
 
