@@ -5,6 +5,7 @@ import {
   Grid,
   GridItem,
   HStack,
+  Icon,
   Image,
   Menu,
   MenuButton,
@@ -16,8 +17,17 @@ import {
 
 import coffee1 from "../assets/menuDummy/coffee-1.jpg";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { IoAdd } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const menuItem = [
+  {
+    name: "Caramel Macchiato",
+    img: coffee1,
+    price: "20.000",
+    stock: "2",
+    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
+  },
   {
     name: "Caramel Macchiato",
     img: coffee1,
@@ -129,7 +139,6 @@ export const MenuGrid = () => {
                 transitionDuration: "0.4s",
                 transitionTimingFunction: "ease-in-out",
               }}
-              // justifyContent="start"
             >
               <Box
                 h="10rem"
@@ -170,7 +179,7 @@ export const MenuGrid = () => {
                     fontWeight="medium"
                     textColor="#8A8A89"
                   >
-                    Qty: {item.stock}
+                    stock: {item.stock}
                   </Text>
                 </Flex>
               </VStack>
@@ -184,11 +193,50 @@ export const MenuGrid = () => {
                   bg: "#4675DB",
                 }}
               >
-                Add to Billing
+                Edit Product
               </Button>
             </VStack>
           </GridItem>
         ))}
+        <GridItem colSpan={{ base: "6", md: "3", lg: "2" }}>
+          <Link to="/create-product">
+            <Flex
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              role="group"
+              p={4}
+              h="full"
+              gap={4}
+              _hover={{
+                cursor: "pointer",
+                bg: "#e7eefd",
+                border: "2px",
+                borderStyle: "dashed",
+                borderColor: "#4D81F1",
+                borderRadius: "xl",
+                transitionDuration: "0.4s",
+                transitionTimingFunction: "ease-out",
+              }}
+            >
+              <Flex borderRadius="lg" p="0.6rem" bg="#e7eefd">
+                <Icon
+                  as={IoAdd}
+                  textColor="#4D81F1"
+                  fontSize="2.6rem"
+                  _groupHover={{
+                    transform: "scale(1.3)",
+                    transitionDuration: "0.4s",
+                    transitionTimingFunction: "ease-out",
+                  }}
+                ></Icon>
+              </Flex>
+              <Text fontWeight="semibold" textColor="#4D81F1" fontSize="1.1rem">
+                Add Product
+              </Text>
+            </Flex>
+          </Link>
+        </GridItem>
       </Grid>
     </>
   );

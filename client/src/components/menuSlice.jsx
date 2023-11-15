@@ -29,7 +29,7 @@ export const MenuSlice = () => {
           textColor="#1C2537"
           ml="1"
         >
-          Choose Category
+          Product List
         </Text>
         <InputGroup
           w={{ base: "full", lg: "20rem" }}
