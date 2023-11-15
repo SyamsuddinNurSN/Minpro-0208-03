@@ -19,7 +19,7 @@ export const UserBarInfo = () => {
         <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
         <Flex flexDirection="column" justifyContent="start" alignItems="start">
           <Text color="#717171" fontSize="0.9rem">
-            I'm a Cashier
+            I'm an Admin
           </Text>
           <Text fontWeight="semibold">John Doe</Text>
         </Flex>
