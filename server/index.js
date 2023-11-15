@@ -12,8 +12,9 @@ app.get("/api", (req, res) => {
   res.send("this is my API");
 });
 
-const { userRouter } = require("./router");
+const { userRouter, transactionRouter } = require("./router");
 app.use("/users", userRouter);
+app.use("/transactions", transactionRouter)
 
 app.listen(PORT, () => {
   // db.sequelize.sync({ alter: true })

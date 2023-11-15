@@ -1,9 +1,10 @@
 const db = require("../models");
 const User = db.User;
-const Cashier = db.Cashier;
+const Transaction = db.Transaction
+const TransactionDetail = db.Transaction_detail
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Sequelize } = require("sequelize");
+
 const path = require("path")
 
 

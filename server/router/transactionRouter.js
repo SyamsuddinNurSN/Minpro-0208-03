@@ -7,5 +7,7 @@ const router = require("express").Router();
 const { transactionController } = require("../controller");
 const { checkRole, verifyToken } = require("../middleware/auth");
 
-router.post('/transactions', verifyToken, checkRole ,transactionController.createTransaction)
-router.get('/transactions', verifyToken, checkRole,transactionController.getAll)
+router.post('/', verifyToken, checkRole ,transactionController.createTransaction)
+router.get('/', verifyToken, checkRole,transactionController.getAll)
+
+module.exports = router;

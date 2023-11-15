@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Isam26798@",
-    "database": "cashier_app",
+    "database": "testing_cashier",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
