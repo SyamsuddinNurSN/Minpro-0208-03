@@ -6,47 +6,107 @@ import { UserBarInfo } from "../components/userBarInfo";
 import createImg from "../assets/adminPage/create.png";
 import updateImg from "../assets/adminPage/update.png";
 import categoryImg from "../assets/adminPage/category.png";
+import { Link } from "react-router-dom";
+
+const tabsContent = [
+  {
+    img: createImg,
+    title: "Create Product",
+    desc: "Add new drinks or food to your menu",
+    route: "/create-product",
+  },
+  {
+    img: updateImg,
+    title: "Product List",
+    desc: "See details and update your food or drinks",
+    route: "/product-list",
+  },
+  {
+    img: categoryImg,
+    title: "Category",
+    desc: "Add, Edit, Delete category",
+    route: "/create-product",
+  },
+];
 
 export const AdminPage = () => {
   return (
     <>
-      {/* pl={{ base: "0", lg: "3.8vw" }} */}
-      {/* bg="#F9F8FB" */}
-
       <SimpleSidebar />
       <Grid templateColumns="repeat(10, 1fr)" h="100vh">
-        <GridItem colSpan="7" w="full" bg="#F9F8FB" pl="10vw" py="7">
+        <GridItem
+          colSpan={{ base: "10", md: "6", lg: "7" }}
+          w="full"
+          bg="#F9F8FB"
+          pl={{ base: "3", md: "11vw", lg: "10vw" }}
+          pr={{ base: "3", md: "1", lg: "5" }}
+          py="7"
+        >
           <Text
-            fontSize={{ base: "1.3rem", lg: "1.6rem" }}
+            fontSize={{ base: "1.3rem", md: "1.6rem" }}
             fontWeight="semibold"
             textColor="#1C2537"
           >
             Admin Page
           </Text>
-          <Grid templateColumns="repeat(2, 1fr)" gap="8" mt="8">
-            <GridItem colSpan="1" bg="white" borderRadius="xl" p="6">
-              <Flex flexDirection="row">
-                <Flex p="4" bg="#EDF2F7" w="max-content" borderRadius="full">
-                  <Image src={createImg} h="3rem" w="3rem"></Image>
-                </Flex>
-                <Text>Create Product</Text>
-              </Flex>
-            </GridItem>
-            <GridItem colSpan="1" bg="white" borderRadius="xl" p="6">
-              <Text>Product List</Text>
-            </GridItem>
-            <GridItem colSpan="1" bg="white" borderRadius="xl" p="6">
-              <Text>Product Category</Text>
-            </GridItem>
+          <Grid
+            templateColumns="repeat(2, 1fr)"
+            gap={{ base: "3", lg: "4" }}
+            mt="8"
+          >
+            {tabsContent.map((item) => (
+              <GridItem
+                colSpan={{ base: "2", lg: "1" }}
+                bg="white"
+                borderRadius="xl"
+                p="6"
+                border="1px"
+                borderColor="#E2E8F0"
+                role="group"
+                _hover={{
+                  border: "1px",
+                  borderColor: "#4D81F1",
+                  bg: "#E7EEFD9E",
+                  transitionDuration: "0.4s",
+                  transitionTimingFunction: "ease-in-out",
+                  cursor: "pointer",
+                }}
+              >
+                <Link to={item.route}>
+                  <Flex flexDirection="row" gap="6" alignItems="center">
+                    <Flex
+                      p="4"
+                      bg="#EDF2F7"
+                      w="max-content"
+                      borderRadius="full"
+                      _groupHover={{
+                        bg: "white",
+                        transitionDuration: "0.4s",
+                        transitionTimingFunction: "ease-in-out",
+                      }}
+                    >
+                      <Image src={item.img} h="2.6rem" w="2.6rem"></Image>
+                    </Flex>
+                    <Flex flexDirection="column" gap="1">
+                      <Text fontWeight="semibold">{item.title}</Text>
+                      <Text textColor="#757575" fontSize="0.9rem" w="80%">
+                        {item.desc}
+                      </Text>
+                    </Flex>
+                  </Flex>
+                </Link>
+              </GridItem>
+            ))}
           </Grid>
         </GridItem>
         <GridItem
-          colSpan="3"
+          colSpan={{ md: "4", lg: "3" }}
           w="full"
           bg="#F9F8FB"
           py="6rem"
           pl="1.5rem"
-          pr="4rem"
+          pr={{ md: "1.2rem", lg: "4rem" }}
+          display={{ base: "none", md: "block" }}
         >
           <UserBarInfo />
         </GridItem>

@@ -23,12 +23,13 @@ import { IoAnalytics } from "react-icons/io5";
 import { IoBagAddOutline } from "react-icons/io5";
 
 import logoApp from "../assets/logo-alt2(2).png";
+import { Link } from "react-router-dom";
 
 const LinkItems = [
-  { name: "Home", icon: GoHome },
-  { name: "Menu", icon: IoRestaurantOutline },
-  { name: "Create", icon: IoBagAddOutline },
-  { name: "Report", icon: IoAnalytics },
+  { name: "Home", icon: GoHome, route: "/" },
+  { name: "Menu", icon: IoRestaurantOutline, route: "/product-list" },
+  { name: "Admin", icon: IoBagAddOutline, route: "/admin" },
+  { name: "Report", icon: IoAnalytics, route: "/product-list" },
   //   { name: "Settings", icon: FiSettings },
 ];
 
@@ -87,15 +88,17 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          textColor="#A4A4A4"
-          fontSize={{ base: "0.9rem", md: "0", lg: "0.9rem" }}
-          fontWeight="medium"
-        >
-          {link.name}
-        </NavItem>
+        <Link to={link.route}>
+          <NavItem
+            key={link.name}
+            icon={link.icon}
+            textColor="#A4A4A4"
+            fontSize={{ base: "0.9rem", md: "0", lg: "0.9rem" }}
+            fontWeight="medium"
+          >
+            {link.name}
+          </NavItem>
+        </Link>
       ))}
     </Box>
   );
@@ -120,6 +123,12 @@ const NavItem = ({ icon, children, ...rest }) => {
         flexDirection={{ base: "row", md: "column" }}
         // alignItems={{ base: "center" }}
         _hover={{
+          bg: "#4D81F1",
+          color: "white",
+          transitionDuration: "0.4s",
+          transitionTimingFunction: "ease-in-out",
+        }}
+        _focus={{
           bg: "#4D81F1",
           color: "white",
           transitionDuration: "0.4s",

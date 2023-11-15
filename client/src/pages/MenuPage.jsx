@@ -1,8 +1,9 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Stack } from "@chakra-ui/react";
 import SimpleSidebar from "../components/sidebarLeft";
 
 import { BillsBar } from "../components/billsBar";
 import { MenuSlice } from "../components/menuSlice";
+import { UserBarInfo } from "../components/userBarInfo";
 export const MenuPage = () => {
   return (
     <>
@@ -29,20 +30,17 @@ export const MenuPage = () => {
           py="7"
           colSpan={2}
           // h="100vh"
-          w="full"
-          bg="#FFFFFF"
-          borderLeft="1px"
-          borderLeftColor="#E2E8F0"
+          // w="full"
+          bg="#F9F8FB"
           display={{ base: "none", lg: "block" }}
           gap="4"
         >
-          <BillsBar />
+          {/* <BillsBar /> */}
+          <Box pos="fixed" w="20%">
+            <UserBarInfo />
+          </Box>
         </GridItem>
       </Grid>
-      {/* <Grid templateColumns="repeat(8, 1fr)" gap={6}>
-        <GridItem colSpan={6} h="100vh" w="full" bg="blue.500" />
-        <GridItem  />
-      </Grid> */}
     </>
   );
 };
