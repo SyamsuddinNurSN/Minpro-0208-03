@@ -4,19 +4,23 @@ const db = require("./models");
 const cors = require("cors");
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors())
 app.use("/public", express.static("./public"));
+
+
 
 app.get("/api", (req, res) => {
   res.send("this is my API");
 });
 
 
-const { userRouter,productRouter, transactionRouter } = require("./router");
+const { userRouter,productRouter, categoryRouter, transactionRouter } = require("./router");
+
 app.use("/users", userRouter);
 app.use("/transactions", transactionRouter)
 app.use("/products", productRouter);
+app.use("/categories", categoryRouter);
 
 
 app.listen(PORT, () => {
