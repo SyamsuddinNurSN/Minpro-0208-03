@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "mysql00!",
-    "database": "cashier_app_minpro",
+    "password": "Isam26798@",
+    "database": "testing_cashier",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
