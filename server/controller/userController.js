@@ -1,11 +1,9 @@
 const db = require("../models");
 const User = db.User;
-const Transaction = db.Transaction
-const TransactionDetail = db.Transaction_detail
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const path = require("path")
+// const path = require("path")
 
 
 // Import model atau koneksi database yang diperlukan

@@ -11,22 +11,26 @@ import {
 } from "@chakra-ui/react";
 import { CiSettings } from "react-icons/ci";
 import avaDummy from "../assets/ava-dummy.png";
-
+import { useDispatch, useSelector } from "react-redux";
 import espressoImg from "../assets/menuDummy/espresso-1.jpg";
+import { removeFromCart, selectCart, updateQuantity } from "../redux/cartSlice";
 
-const billsItem = [
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-];
+
+  
+
 
 export const BillsBar = () => {
+const dispatch = useDispatch();
+const cart = useSelector(selectCart)
+const cartItems = cart?.items?? []
+ 
+const handleUpdateQuantity = (id, newQuantity) => {
+  dispatch(updateQuantity({ id, quantity: newQuantity }));
+};
+
+const handleRemoveFromCart = (id) => {
+  dispatch(removeFromCart(id));
+};
   return (
     <Flex
       flexDirection="column"
@@ -98,8 +102,8 @@ export const BillsBar = () => {
           },
         }}
       >
-        {billsItem.map((item) => (
-          <Flex justifyContent="space-between" alignItems="stretch">
+        {cartItems.map((item) => (
+          <Flex key={item.id}justifyContent="space-between" alignItems="stretch">
             <Flex alignItems="center">
               <Image
                 src={item.img}
@@ -126,10 +130,10 @@ export const BillsBar = () => {
                   textColor="#8A8A89"
                   fontSize="0.9rem"
                 >
-                  x
+                 {item.price} x
                 </Text>
                 <Text fontWeight="medium" fontSize="0.9rem">
-                  {item.qty}
+                 quantity: {item.quantity}
                 </Text>
               </Flex>
             </Flex>
@@ -141,10 +145,10 @@ export const BillsBar = () => {
                 fontWeight="semibold"
                 textColor="#8A8A89"
               >
-                Rp
+                
               </Text>
               <Text fontWeight="medium" textColor="#8A8A89" fontSize="1rem">
-                {item.total}
+                {}
               </Text>
             </Flex>
           </Flex>

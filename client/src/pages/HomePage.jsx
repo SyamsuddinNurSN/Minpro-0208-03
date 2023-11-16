@@ -6,20 +6,20 @@ import Navbar from "../components/NavBar";
 import { useSelector } from "react-redux";
 
 function HomePage() {
-
-    const user = useSelector((state) => state.user.value);
-    console.log(user.role);
-    const admin = user.role === "admin";
-    const checkUser = () => {
-      if (user) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-    useEffect(() => {
-      checkUser();
-    });
+  const user = useSelector((state) => state.user.value);
+  console.log(user.role);
+  const admin = user.role === "admin";
+  const cashier = user.cashier === "cashier";
+  const checkUser = () => {
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  useEffect(() => {
+    checkUser();
+  });
 
   return (
     <>
@@ -43,11 +43,19 @@ function HomePage() {
             Terima kasih telah mengunjungi halaman kami. Kami siap memberikan
             pengalaman yang luar biasa untuk Anda.
           </Text>
-        {(admin &&<Link to="/register-cashier">
-        <Button colorScheme="yellow" size="lg">
-            Register your cashier
-        </Button>
-        </Link>)}
+          {admin ? (
+            <Link to="/register-cashier">
+              <Button colorScheme="yellow" size="lg">
+                Register your cashier
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/menu-cashier">
+              <Button colorScheme="yellow" size="lg">
+                Menu
+              </Button>
+            </Link>
+          )}
         </Box>
       </Box>
     </>
