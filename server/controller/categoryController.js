@@ -4,13 +4,43 @@ const Category = db.Category
 module.exports = {
     addCategory: async (req, res) => {
         try {
+            const { categoryName } = req.body
+
             const result = await Category.create({
-                categoryName: req.body.name
+                categoryName,
+                img: req.file?.path
             })
-            res.status(200).send(result, "Success creating new category")
+
+            console.log(result);
+
+            res.status(200).send(result)
         } catch (err) {
             console.log(err);
             res.status(400).send({ message: err.message })
+        }
+    },
+
+    getAll: async (req, res) => {
+        try {
+            const result = await Category.findAndCountAll();
+            res.status(200).send({ result })
+        } catch (err) {
+            console.log("This is the error", err);
+            res.status(400).send({ message: err.message })
+        }
+    },
+
+    getCategoryById: async (req, res) => {
+        try {
+            const result = await Category.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
+            res.status(200).send({ result })
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({ messsage: err.message })
         }
     },
 
@@ -28,12 +58,12 @@ module.exports = {
         }
     },
 
-    updateCategory: async (req, res) => {
-        try {
+    // updateCategory: async (req, res) => {
+    //     try {
 
-        } catch (err) {
-            console.log(err);
-            res.status(400).send({ message: err.message })
-        }
-    }
+    //     } catch (err) {
+    //         console.log(err);
+    //         res.status(400).send({ message: err.message })
+    //     }
+    // }
 }

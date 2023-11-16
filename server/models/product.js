@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -10,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // Define association with Category
+      Product.belongsTo(models.Category, {
+        foreignKey: 'categoryId', // This is the foreign key in the Product table
+        onDelete: 'CASCADE', // Delete products when their associated category is deleted
+      })
     }
   }
   Product.init({
