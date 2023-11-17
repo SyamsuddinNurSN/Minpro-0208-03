@@ -50,7 +50,7 @@ export function LoginUser() {
         setUser(response.data[0]);
         // dispatch(setData(response.data))
         localStorage.setItem("token", response.data?.token);
-        navigate("/Home");
+        navigate("/home");
         window.location.reload();
       } else {
         data.username = data.data_input;
@@ -62,17 +62,17 @@ export function LoginUser() {
         setUser(response.data[0]);
         // dispatch(setData(response.data))
         localStorage.setItem("token", response.data?.token);
-        navigate("/Home");
+        navigate("/home");
         window.location.reload();
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
 
-      // Display a toast message for login failure
+  
       toast({
-        title: "Login Failed",
+        title: "Gagal Masuk",
         description:
-          "Email/Username or password is incorrect. Please try again.",
+          "Email/Username atau password ada yang salah. silahkan coba lagi",
         status: "error",
         duration: 5000,
         isClosable: true,

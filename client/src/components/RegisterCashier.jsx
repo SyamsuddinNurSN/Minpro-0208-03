@@ -61,15 +61,15 @@ export const RegisterCashier = () => {
       }
       );
 
-      // toast({
-      //   title: "Akun Telah Dibuat",
-      //   description: "Anda sekarang dapat menggunakan akun Anda.",
-      //   status: "success",
-      //   duration: 9000,
-      //   isClosable: true,
-      // });
+      toast({
+        title: "Akun Telah Dibuat",
+        description: "Anda sebagai Kasir dapat menggunakan Akun Anda.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
 
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       console.log(err);
     }

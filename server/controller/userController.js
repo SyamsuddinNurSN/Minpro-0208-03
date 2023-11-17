@@ -1,14 +1,17 @@
 const db = require("../models");
 const User = db.User;
-const Cashier = db.Cashier;
+const Transaction = db.Transaction;
+const TransactionDetail = db.Transaction_detail;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Sequelize } = require("sequelize");
-const sequelize = require("../database");
+
+const path = require("path");
+
 const { create } = require("handlebars");
 const transporter = require("../middleware/transporter");
 const fs = require("fs");
 const handlebars = require("handlebars");
+const user = require("../models/user");
 
 // Import model atau koneksi database yang diperlukan
 
@@ -18,7 +21,18 @@ module.exports = {
     try {
       const { fullname, username, email, password, role } = req.body;
 
-      // Cek apakah admin sudah terdaftar
+      const isEmailExist = await User.findOne({
+        where: {
+          email,
+        },
+      });
+
+      if (isEmailExist) {
+        return res.status(489).send({
+          message: "email has been used",
+        });
+      }
+
       const existingAdmin = await User.findOne({
         where: { email, role: "admin" },
       });
@@ -27,11 +41,9 @@ module.exports = {
         return res.status(400).json({ error: "Admin already exists" });
       }
 
-      // Enkripsi password sebelum disimpan
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      // Membuat user admin baru
       await User.create({
         fullname,
         username,
@@ -49,7 +61,11 @@ module.exports = {
 
   getCashier: async (req, res) => {
     try {
-      const result = await User.findAndCountAll();
+      const result = await User.findAndCountAll({
+        where: {
+          role: "cashier",
+        },
+      });
       res.status(200).send(result);
     } catch (err) {
       console.log(err);
@@ -57,7 +73,6 @@ module.exports = {
     }
   },
 
-  // Endpoint untuk login
   login: async (req, res) => {
     try {
       let isUserExist;
@@ -81,7 +96,6 @@ module.exports = {
         return res.status(401).json({ error: "Unauthorized" });
       }
 
-      // Periksa kecocokan password
       const passwordMatch = await bcrypt.compare(
         password,
         isUserExist.password
@@ -91,21 +105,15 @@ module.exports = {
         return res.status(401).json({ error: "Unauthorized" });
       }
 
-      // Buat token JWT untuk user dengan menambahkan role ke payload
       const payload = { id: isUserExist.id, role: isUserExist.role };
       const token = jwt.sign(payload, "LogIn");
 
       console.log("ini user", isUserExist);
 
-      // Lakukan tindakan berdasarkan peran pengguna
       if (isUserExist.role === "admin") {
-        // Tindakan untuk admin
         console.log("Admin login");
-        // Lakukan apa yang diperlukan untuk admin
       } else if (isUserExist.role === "cashier") {
-        // Tindakan untuk cashier
         console.log("Cashier login");
-        // Lakukan apa yang diperlukan untuk cashier
       }
 
       // const data = fs.readFileSync("./resetpassword.html", "utf-8");
@@ -116,12 +124,12 @@ module.exports = {
       //     username: username,
       //   });
 
-        // await transporter.sendMail({
-        //   from: "amanhidayat39@gmail.com",
-        //   to: email,
-        //   subject: "Email Confirmation",
-        //   html: tempResult,
-        // });
+      // await transporter.sendMail({
+      //   from: "amanhidayat39@gmail.com",
+      //   to: email,
+      //   subject: "Email Confirmation",
+      //   html: tempResult,
+      // });
 
       res.status(200).json({
         message: "logged in successfully",
@@ -135,47 +143,32 @@ module.exports = {
   },
 
   registerCashier: async (req, res) => {
-    const t = await sequelize.transaction();
-
     try {
       const { fullname, username, email, password, role } = req.body;
+      const isEmailExist = await User.findOne({
+        where: {
+          email,
+        },
+      });
 
-      // Encrypt password before saving
+      if (isEmailExist) {
+        return res.status(489).send("email has been used");
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Create a new user with the role "cashier"
-      const newUser = await User.create(
-        {
-          fullname,
-          username,
-          email,
-          password: hashedPassword,
-          role: "cashier",
-        },
-        
-      );
-
-      const data = fs.readFileSync("./verifiedakun.html", "utf-8");
-        const tempCompile = await handlebars.compile(data);
-        const tempResult = tempCompile({
-          createdAt: result.createdAt,
-          name: name,
-          username: username,
-        });
-
-        await transporter.sendMail({
-          from: "amanhidayat39@gmail.com",
-          to: email,
-          subject: "Email Confirmation",
-          html: tempResult,
-        });
-
-        
+      const newUser = await User.create({
+        fullname,
+        username,
+        email,
+        password: hashedPassword,
+        role: "cashier",
+      });
 
       res.status(201).json({ message: "Cashier created successfully" });
     } catch (error) {
       console.error(error);
-      
+
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
@@ -193,16 +186,15 @@ module.exports = {
       res.status(400).send({ message: error.message });
     }
   },
-  resetPassword:  async (req, res) => {
-    
+  resetPassword: async (req, res) => {
     try {
-      console.log(`ini req body`,req.body);
-      const { email} = req.body
+      console.log(`ini req body`, req.body);
+      const { email } = req.body;
       const data = fs.readFileSync("./resetpassword.html", "utf-8");
       const tempCompile = await handlebars.compile(data);
       const tempResult = tempCompile({
-       email: email, link: `http://localhost:3000/resetpassword/${email}`
-
+        email: email,
+        link: `http://localhost:3000/reset-password/${email}`,
       });
 
       await transporter.sendMail({
@@ -211,13 +203,99 @@ module.exports = {
         subject: "Email Confirmation",
         html: tempResult,
       });
-      
+      res.status(200).send({ message: "Email has been sent" });
     } catch (error) {
       console.log(error);
+      res.status(400).send({ error: error.message });
     }
+  },
+  editProfile: async (req, res) => {
+    try {
+      const { fullname, username } = req.body;
+      await User.update(
+        {
+          fullname,
+          username,
+          profile_picture: req.file?.path,
+        },
 
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      );
+      res.status(200).send("Profile Updated");
+    } catch (error) {
+      console.log(err);
+      res.status(400).send({ err: err.message });
+    }
+  },
+  updateUserPassword: async (req, res) => {
+    try {
+      const { email, newPassword } = req.body;
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      console.log("ini data body", req.body);
 
+      await User.update(
+        {
+          password: hashPassword,
+        },
+        {
+          where: {
+            email: email,
+          },
+        }
+      );
+      res.status(200).send("Profile Updated");
+    } catch (error) {
+      console.log(err);
+      res.status(400).send({ err: err.message });
+    }
+  },
+  // editById: async (req, res) => {
+  //   try {
+  //     const { isVerified } = req.body;
+  //     const user = await User.findOne({
+  //       where: {
+  //         id: req.params.id
+  //       },
+  //     });
 
-  }
+  //     if (user.isVerified===true) {
+  //       await user.update(
+
+  //       )
+  //     }
+
+  //     await user.update(updateUser);
+      
+  //     if ("isVerified" in req.body) {
+  //       user.isVerified = isVerified;
+  //     }
+
+  //     await user.update(updateUser);
+
+  //     res.status(200).send("User has been updated");
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(400).send({ message: error.message });
+  //   }
+  // },
+
+  deleteCashier: async (req, res) => {
+    console.log(req.params);
+    try {
+        await User.destroy({
+            where: {
+                id: req.params.id,
+            },
+        });
+        res.status(200).send('Cashier Deleted');
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 };

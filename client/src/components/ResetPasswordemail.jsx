@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
@@ -12,16 +12,16 @@ import {
 import axios from "axios"; // Import Axios
 
 const ResetPasswordForm = () => {
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async (values) => {
-    console.log(values);
     try {
-      // Kirim permintaan reset password ke backend
-      const response = await axios.post("http://localhost:2000/users/reset-password", values);
-      // Handle respon dari server jika diperlukan
+      setLoading(true)
+      const response = await axios.patch("http://localhost:2000/users/reset-password", values);
       console.log("Password reset success:", response.data);
+      setLoading(false)
     } catch (error) {
-      // Handle kesalahan jika ada
       console.error("Password reset error:", error);
+      setLoading(false)
     }
   };
 
@@ -63,7 +63,7 @@ const ResetPasswordForm = () => {
                           />
                   
                 </FormControl>
-                <Button mt={4} colorScheme="blue" type="submit" width="100%">
+                <Button mt={4} colorScheme="blue" isLoading={loading} loadingText="loading" type="submit" width="100%">
                   Kirim
                 </Button>
               </Box>
