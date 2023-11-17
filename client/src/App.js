@@ -18,19 +18,22 @@ import axios from "axios";
 import { ProductDetailPage } from "./pages/productDetailPage";
 import { StatusProductModal } from "./components/productDetail/statusProductModal";
 import { EditProductModal } from "./components/productDetail/editProductModal";
+import { MenuCashier } from "./pages/MenuPageCashier";
 
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
   { path: "/register", element: <RegisterUser /> },
-  { path: "/login", element: <LoginUser /> },
+
   { path: "/product-list", element: <MenuPage /> },
   { path: "/create-product", element: <CreateProductPage /> },
   { path: "/admin", element: <AdminPage /> },
   { path: "/register-cashier", element: <RegisterCashier /> },
-  { path: "/login", element: <LoginUser /> },
+
+  { path: "/menu-cashier", element: <MenuCashier /> },
   { path: "/profile", element: <Profile /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
-  { path: "/", element: <WelcomePage /> }, // Default route
+  { path: "/", element: <LoginUser /> },
+
   { path: "/product-detail", element: <ProductDetailPage /> },
   // Testing Modal
   { path: "/modal", element: <StatusProductModal /> },
@@ -42,7 +45,6 @@ function App() {
   const dispatch = useDispatch();
 
   const KeepLogin = async () => {
-
     try {
       const response = await axios.get(
         `http://localhost:2000/users/keep-login`,
@@ -57,24 +59,17 @@ function App() {
     } catch (err) {
       console.log(err);
     }
+  };
 
-
-  }
-  
-    useEffect(() => {
+  useEffect(() => {
     KeepLogin();
   }, []);
-  
 
-    return (
-
+  return (
     <>
       <RouterProvider router={router} />
     </>
   );
-
-} 
-  
-
+}
 
 export default App;

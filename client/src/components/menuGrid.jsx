@@ -19,81 +19,34 @@ import coffee1 from "../assets/menuDummy/coffee-1.jpg";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { IoAdd } from "react-icons/io5";
 import { Link } from "react-router-dom";
-
-const menuItem = [
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-  {
-    name: "Caramel Macchiato",
-    img: coffee1,
-    price: "20.000",
-    stock: "2",
-    desc: "Espresso combined with vanilla-flavoured syrup, milk and caramel sauce over ice. ",
-  },
-];
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export const MenuGrid = () => {
+  const [products, setProducts] = useState([]);
+  const getData = async () => {
+    try {
+      const response = await axios.get("http://localhost:2000/products");
+      setProducts(response.data.allProduct.rows);
+      console.log(response.data.allProduct.rows);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(products);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const dispatch = useDispatch();
+  const handleAddToCart = (item) => {
+    const { id, name, price, quantity } = item;
+    dispatch(addToCart({ id, name, price, quantity }));
+  };
   return (
     <>
       <HStack mt={{ base: "2", lg: "3" }} justifyContent="space-between">
@@ -121,9 +74,9 @@ export const MenuGrid = () => {
           </MenuList>
         </Menu>
       </HStack>
-      <Grid templateColumns="repeat(6, 1fr)" gap={6}>
-        {menuItem.map((item) => (
-          <GridItem colSpan={{ base: "6", md: "3", lg: "2" }}>
+      <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+        {products.map((item) => (
+          <GridItem key={item.id} colSpan={{ base: "6", md: "3", lg: "2" }}>
             <VStack
               flexDirection="column"
               bg="white"
@@ -192,8 +145,9 @@ export const MenuGrid = () => {
                 _hover={{
                   bg: "#4675DB",
                 }}
+                onClick={() => handleAddToCart(item)}
               >
-                Edit Product
+                add to cart
               </Button>
             </VStack>
           </GridItem>

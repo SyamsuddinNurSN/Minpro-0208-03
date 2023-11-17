@@ -38,7 +38,7 @@ module.exports = {
 
     getAllProduct: async (req, res) => {
         try {
-            const allProduct = await Product.findAll({
+            const allProduct = await Product.findAndCountAll({
                 include: [
                     {
                         model: Category,
