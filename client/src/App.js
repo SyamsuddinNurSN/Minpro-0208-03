@@ -23,17 +23,17 @@ import { MenuCashier } from "./pages/MenuPageCashier";
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
   { path: "/register", element: <RegisterUser /> },
-  
+
   { path: "/product-list", element: <MenuPage /> },
   { path: "/create-product", element: <CreateProductPage /> },
   { path: "/admin", element: <AdminPage /> },
   { path: "/register-cashier", element: <RegisterCashier /> },
-  // { path: "/login", element: <LoginUser /> },
+
   { path: "/menu-cashier", element: <MenuCashier /> },
   { path: "/profile", element: <Profile /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
   { path: "/", element: <LoginUser /> },
-  // { path: "/", element: <WelcomePage /> }, // Default route
+
   { path: "/product-detail", element: <ProductDetailPage /> },
   // Testing Modal
   { path: "/modal", element: <StatusProductModal /> },

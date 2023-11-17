@@ -1,7 +1,6 @@
-import { Box, Flex, Grid, GridItem, Stack } from "@chakra-ui/react";
+import { Grid, GridItem, } from "@chakra-ui/react";
 import SimpleSidebar from "../components/sidebarLeft";
 import { BillsBar } from "../components/billsBar";
-import { UserBarInfo } from "../components/userBarInfo";
 import { MenuHead } from "../components/MenuHead";
 export const MenuCashier = () => {
   
@@ -36,9 +35,9 @@ export const MenuCashier = () => {
           gap="4"
         >
           <BillsBar />
-          <Box pos="fixed" w="20%">
+          {/* <Box pos="fixed" w="20%">
             <UserBarInfo />
-          </Box>
+          </Box> */}
         </GridItem>
       </Grid>
     </>

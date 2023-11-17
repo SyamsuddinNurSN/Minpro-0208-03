@@ -1,11 +1,11 @@
 'use strict';
 
-import { faker } from '@faker-js/faker';
+
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-   await queryInterface.bulkInsert("Category", [
+   await queryInterface.bulkInsert("categories", [
     {
       categoryName: "latte",
       img: null,
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Category,", null, {})
+    await queryInterface.bulkDelete("categories,", null, {})
   }
 };

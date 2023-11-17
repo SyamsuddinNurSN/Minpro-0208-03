@@ -29,7 +29,7 @@ export const UserBarInfo = () => {
         bg="white"
         borderRadius="xl"
       >
-        <Image src={`http://localhost:2000/${profilePicture}`} h="3rem" w="3rem" rounded="lg"></Image>
+        {/* <Image src={`http://localhost:2000/${profilePicture}`} h="3rem" w="3rem" rounded="lg"></Image> */}
         <Flex flexDirection="column" justifyContent="start" alignItems="start">
           <Text color="#717171" fontSize="0.9rem">
             I'm an {user.role}

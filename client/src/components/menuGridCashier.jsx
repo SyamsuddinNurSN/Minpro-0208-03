@@ -24,7 +24,7 @@ import { addToCart } from "../redux/cartSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export const MenuGrid = () => {
+export const MenuGridCashier = () => {
   const [products, setProducts] = useState([]);
   const getData = async () => {
     try {

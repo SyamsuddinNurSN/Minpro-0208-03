@@ -1,14 +1,17 @@
 // cartSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState: {
     items: [],
   },
   reducers: {
     addToCart: (state, action) => {
-      const existingItem = state.items.find((item) => item.id === action.payload.id);
+      console.log("Adding to cart:", action.payload);
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
 
       if (existingItem) {
         existingItem.quantity += 1;
@@ -26,7 +29,13 @@ export const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       const idToRemove = action.payload;
-      state.items = state.items.filter((item) => item.id !== idToRemove);
+      // Use filter to create a new array without the item to be removed
+      const updatedItems = state.items.filter((item) => item.id !== idToRemove);
+      // Return a new state object with the updated items array
+      return {
+        ...state,
+        items: updatedItems,
+      };
     },
   },
 });

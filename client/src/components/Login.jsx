@@ -45,7 +45,7 @@ export function LoginUser() {
           data
         );
         setUser(response.data[0]);
-        dispatch(setData(response.data))
+        dispatch(setData(response.data));
         localStorage.setItem("token", response.data?.token);
         navigate("/menu-cashier");
         window.location.reload();
@@ -57,7 +57,7 @@ export function LoginUser() {
           data
         );
         setUser(response.data[0]);
-        dispatch(setData(response.data))
+        dispatch(setData(response.data));
         localStorage.setItem("token", response.data?.token);
         navigate("/menu-cashier");
         window.location.reload();

@@ -1,10 +1,11 @@
 const db = require("../models")
 const Product = db.Product
+const Category = db.Category
 
 module.exports = {
     createProduct: async (req, res) => {
         try {
-            const { name, price, stock, description } = req.body
+            const { name, price, stock, description, categoryId } = req.body
 
             // check if product already exist
             const findProduct = await Product.findOne({
@@ -19,7 +20,9 @@ module.exports = {
                     name,
                     price,
                     stock,
-                    description
+                    description,
+                    img: req.file?.path,
+                    categoryId
                 })
             } else {
                 return res.status(400).send({ message: "Product already exist" })
@@ -35,7 +38,14 @@ module.exports = {
 
     getAllProduct: async (req, res) => {
         try {
-            const allProduct = await Product.findAll();
+            const allProduct = await Product.findAndCountAll({
+                include: [
+                    {
+                        model: Category,
+                        attributes: ['categoryName']
+                    }
+                ]
+            });
             res.status(200).send({ allProduct })
         } catch (err) {
             console.log(err);

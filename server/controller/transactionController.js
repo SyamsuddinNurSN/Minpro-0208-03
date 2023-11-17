@@ -11,8 +11,9 @@ module.exports = {
 
   createTransaction: async (req, res) => {
     try {
-      // Buat transaksi
       const { total_amount, customer_amount, change, quantity } = req.body;
+
+      // Create the transaction
       const transaction = await Transaction.create({
         total_amount,
         customer_amount,
@@ -20,32 +21,34 @@ module.exports = {
         UserId: req.user.id,
       });
 
-      // Ambil informasi produk
-      const selectedProduct = await Product.findOne({
-        where: {
-          id: req.params.id,
-        },
-      });
-
-      if (selectedProduct) {
-        // Hitung nilai subtotal
-        const subtotal = quantity * selectedProduct.price;
-
-        // Buat detail transaksi
-        await TransactionDetail.create({
-          TransactionId: transaction.id,
-          ProductId: selectedProduct.id,
-          quantity,
-          price: selectedProduct.price,
-          subtotal,
+      // Loop through cart items and create transaction details
+      for (const item of req.body.cartItems) {
+        const selectedProduct = await Product.findOne({
+          where: {
+            id: item.id,
+          },
         });
 
-        console.log("Transaction created successfully");
-        res.status(201).send({ message: "Transaction created successfully" });
-      } else {
-        console.log("Product not found");
-        res.status(404).send({ message: "Product not found" });
+        if (selectedProduct) {
+          const subTotal = item.price * item.quantity;
+
+          // Create detail transaction for each product in the cart
+          await TransactionDetail.create({
+            TransactionId: transaction.id,
+            ProductId: selectedProduct.id,
+            quantity: item.quantity,
+            subTotal,
+          });
+        } else {
+          console.log(`Product with id ${item.id} not found`);
+          return res
+            .status(404)
+            .send({ message: `Product with id ${item.id} not found` });
+        }
       }
+
+      console.log("Transaction created successfully");
+      res.status(201).send({ message: "Transaction created successfully" });
     } catch (error) {
       console.error(error);
       res.status(500).send({ message: "Internal Server Error" });
