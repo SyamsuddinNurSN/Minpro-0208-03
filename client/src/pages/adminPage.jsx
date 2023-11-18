@@ -3,9 +3,10 @@ import SimpleSidebar from "../components/sidebarLeft";
 
 import { UserBarInfo } from "../components/userBarInfo";
 
-import createImg from "../assets/adminPage/create.png";
-import updateImg from "../assets/adminPage/update.png";
+import createImg from "../assets/adminPage/create-2.png";
+import updateImg from "../assets/adminPage/list.png";
 import categoryImg from "../assets/adminPage/category.png";
+import salesImg from "../assets/adminPage/sales.png"
 import { Link } from "react-router-dom";
 
 const tabsContent = [
@@ -25,7 +26,13 @@ const tabsContent = [
     img: categoryImg,
     title: "Category",
     desc: "Add, Edit, Delete category",
-    route: "/create-product",
+    route: "/manage-category",
+  },
+  {
+    img: salesImg,
+    title: "Sales Report",
+    desc: "keep track of your sales in one place",
+    route: "/manage-category",
   },
 ];
 
@@ -37,7 +44,8 @@ export const AdminPage = () => {
         <GridItem
           colSpan={{ base: "10", md: "6", lg: "7" }}
           w="full"
-          bg="#F9F8FB"
+          bg="#F6FAFEFF"
+          // bg="#F9F8FB"
           pl={{ base: "3", md: "11vw", lg: "10vw" }}
           pr={{ base: "3", md: "1", lg: "5" }}
           py="7"
@@ -102,7 +110,8 @@ export const AdminPage = () => {
         <GridItem
           colSpan={{ md: "4", lg: "3" }}
           w="full"
-          bg="#F9F8FB"
+          bg="#F6FAFEFF"
+          // bg="#F9F8FB"
           py="6rem"
           pl="1.5rem"
           pr={{ md: "1.2rem", lg: "4rem" }}

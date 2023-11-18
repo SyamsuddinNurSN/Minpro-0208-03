@@ -1,22 +1,9 @@
-import { Flex, Icon, Image, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { Flex, Icon, Image, Text } from "@chakra-ui/react";
 
 import avaDummy from "../assets/ava-dummy.png";
 import { CiSettings } from "react-icons/ci";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 
 export const UserBarInfo = () => {
-  const user = useSelector((state) => state.user.value);
-  console.log(user);
-  const profilePicture = user.profile_picture;
-
-  const navigate = useNavigate()
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    window.location.reload();
-  };
-
   return (
     <Flex flexDirection={"column"}>
       {/* User */}
@@ -24,21 +11,20 @@ export const UserBarInfo = () => {
         justifyContent="space-between"
         alignItems="center"
         w="full"
-        gap={7}
         p="4"
         bg="white"
         borderRadius="xl"
       >
-        {/* <Image src={`http://localhost:2000/${profilePicture}`} h="3rem" w="3rem" rounded="lg"></Image> */}
-        <Flex flexDirection="column" justifyContent="start" alignItems="start">
-          <Text color="#717171" fontSize="0.9rem">
-            I'm an {user.role}
-          </Text>
-          <Text fontWeight="semibold">{user.fullname}</Text>
+        <Flex>
+          <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
         </Flex>
-        <Flex flexGrow="1" justifyContent="end" h="full">
-        <Menu>
-          <MenuButton>
+        <Flex flexDirection="column" justifyContent="start" alignItems="start" flexGrow="1" ml={{ md: "0.5rem", lg: "1.4rem" }}>
+          <Text color="#717171" fontSize="0.9rem">
+            I'm Admin
+          </Text>
+          <Text fontWeight="semibold">John Doe</Text>
+        </Flex>
+        <Flex justifyContent="end" h="full">
           <Icon
             as={CiSettings}
             h="3rem"
@@ -51,18 +37,6 @@ export const UserBarInfo = () => {
             }}
             rounded="lg"
           />
-          </MenuButton>
-          <MenuList>
-            <Link to="/profile">
-              <MenuItem>
-              Your Profile
-              </MenuItem>
-            </Link>
-            <MenuItem onClick={handleLogout}>
-              Sign Out
-              </MenuItem>
-          </MenuList>
-          </Menu>
         </Flex>
       </Flex>
     </Flex>

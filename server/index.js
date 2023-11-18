@@ -10,9 +10,14 @@ app.use(express.json());
 app.use(cors());
 app.use("/public", express.static("./public"));
 
+// app.get('/cors', (req, res) => {
+//   res.send('This has CORS enabled 🎈')
+// })
+
 app.get("/api", (req, res) => {
   res.send("this is my API");
 });
+
 
 const {
   userRouter,
