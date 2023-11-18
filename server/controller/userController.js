@@ -1,10 +1,9 @@
 const db = require("../models");
 const User = db.User;
-const Cashier = db.Cashier;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Sequelize } = require("sequelize");
-const path = require("path")
+
+// const path = require("path")
 
 
 // Import model atau koneksi database yang diperlukan

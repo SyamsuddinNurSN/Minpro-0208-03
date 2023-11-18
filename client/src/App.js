@@ -16,21 +16,27 @@ import { setData } from "./redux/userSlice";
 import { ProductDetailPage } from "./pages/productDetailPage";
 import axios from "axios";
 import { CategoryManagePage } from "./pages/categoryManagePage";
+import { StatusProductModal } from "./components/productDetail/statusProductModal";
+import { EditProductModal } from "./components/productDetail/editProductModal";
+import { MenuCashier } from "./pages/MenuPageCashier";
+
 
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
   { path: "/register", element: <RegisterUser /> },
-  { path: "/login", element: <LoginUser /> },
+
   { path: "/product-list", element: <MenuPage /> },
   { path: "/create-product", element: <CreateProductPage /> },
   { path: "/admin", element: <AdminPage /> },
   { path: "/register-cashier", element: <RegisterCashier /> },
-  { path: "/login", element: <LoginUser /> },
+
+  { path: "/menu-cashier", element: <MenuCashier /> },
   { path: "/profile", element: <Profile /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
   { path: "/", element: <WelcomePage /> }, // Default route
   { path: "/product-detail/:id", element: <ProductDetailPage /> },
   { path: "/manage-category", element: <CategoryManagePage /> }
+
 ]);
 
 function App() {
@@ -38,7 +44,6 @@ function App() {
   const dispatch = useDispatch();
 
   const KeepLogin = async () => {
-
     try {
       const response = await axios.get(
         `http://localhost:2000/users/keep-login`,
@@ -55,17 +60,17 @@ function App() {
     }
   }
 
+
   useEffect(() => {
     KeepLogin();
   }, []);
 
-  return (
 
+  return (
     <>
       <RouterProvider router={router} />
     </>
   );
-
 }
 
 export default App;
