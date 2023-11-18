@@ -5,19 +5,17 @@ import { RegisterUser } from "./components/Register";
 import { MenuPage } from "./pages/MenuPage";
 import { CreateProductPage } from "./pages/createProductPage";
 import { AdminPage } from "./pages/adminPage";
-
 import { Profile } from "./components/Profile/Profile";
+import { RegisterCashier } from "./components/RegisterCashier";
 import EditProfilePage from "./components/Profile/EditProfile";
 import HomePage from "./pages/HomePage";
-import { RegisterCashier } from "./components/RegisterCashier";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setData } from "./redux/userSlice";
-import axios from "axios";
 import { ProductDetailPage } from "./pages/productDetailPage";
-import { StatusProductModal } from "./components/productDetail/statusProductModal";
-import { EditProductModal } from "./components/productDetail/editProductModal";
+import axios from "axios";
+import { CategoryManagePage } from "./pages/categoryManagePage";
 
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
@@ -31,10 +29,8 @@ const router = createBrowserRouter([
   { path: "/profile", element: <Profile /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
   { path: "/", element: <WelcomePage /> }, // Default route
-  { path: "/product-detail", element: <ProductDetailPage /> },
-  // Testing Modal
-  { path: "/modal", element: <StatusProductModal /> },
-  { path: "/modal-2", element: <EditProductModal /> },
+  { path: "/product-detail/:id", element: <ProductDetailPage /> },
+  { path: "/manage-category", element: <CategoryManagePage /> }
 ]);
 
 function App() {
@@ -57,14 +53,13 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-
   }
-  
-    useEffect(() => {
+
+  useEffect(() => {
     KeepLogin();
   }, []);
-  
-    return (
+
+  return (
 
     <>
       <RouterProvider router={router} />

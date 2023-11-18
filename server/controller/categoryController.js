@@ -58,12 +58,26 @@ module.exports = {
         }
     },
 
-    // updateCategory: async (req, res) => {
-    //     try {
+    updateCategory: async (req, res) => {
+        try {
+            const { categoryName } = req.body
 
-    //     } catch (err) {
-    //         console.log(err);
-    //         res.status(400).send({ message: err.message })
-    //     }
-    // }
+            const result = await Category.update(
+                {
+                    categoryName,
+                    img: req.file?.path
+                },
+                {
+                    where: {
+                        id: req.params.id
+                    }
+                }
+            )
+
+            res.status(200).send({ message: "Success updating category", data: result })
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({ message: err.message })
+        }
+    }
 }

@@ -1,20 +1,27 @@
-import { Flex, FormControl, FormLabel, Input, Select } from "@chakra-ui/react"
+import { Flex, FormControl, FormLabel, Input, Select, Text } from "@chakra-ui/react"
+import axios from "axios"
+import { useEffect, useState } from "react"
 
-const categoryOption = [
-    { name: "All" },
-    { name: "Coffee" },
-    { name: "Frappe" },
-    { name: "Juice" },
-    { name: "Milk" },
-    { name: "Tea" },
-    { name: "Mojito" },
-    { name: "Snack" },
-    { name: "Rice" },
-    { name: "Ramen" },
-    { name: "Dessert" },
-];
+export const NameCategoryCreate = ({ formik }) => {
+    const [categoryList, setCategoryList] = useState([])
 
-export const NameCategoryCreate = () => {
+    // fetching category list data
+    const getCategoryList = async () => {
+        try {
+            await axios.get('http://localhost:2000/categories').then((response) => {
+                setCategoryList(response.data.result.rows)
+            })
+        } catch (err) {
+            console.log("error fetching data:", err);
+        }
+    }
+
+    console.log(categoryList);
+
+    useEffect(() => {
+        getCategoryList();
+    }, [])
+
     return (
         <Flex
             gap="6"
@@ -27,10 +34,21 @@ export const NameCategoryCreate = () => {
                         Product Name
                     </FormLabel>
                     <Input
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        error={formik.touched.name && formik.errors.name}
+                        // 
+                        type="text"
                         variant="flushed"
                         size="sm"
                         placeholder="Cappucino"
                     />
+                    {formik.touched.name && formik.errors.name ? (
+                        <Text textColor="red.500" fontSize="sm">
+                            {formik.errors.name}
+                        </Text>
+                    ) : null}
                 </FormControl>
             </Flex>
             <Flex flexDirection="column" gap={1} w="full">
@@ -39,12 +57,17 @@ export const NameCategoryCreate = () => {
                         Category
                     </FormLabel>
                     <Select
+                        name="categoryId"
+                        value={formik.values.categoryId}
+                        onChange={formik.handleChange}
+                        error={formik.touched.categoryId && formik.errors.categoryId}
+                        // 
                         variant="flushed"
                         size="sm"
                         placeholder="select a category"
                     >
-                        {categoryOption.map((item) => (
-                            <option value="option1">{item.name}</option>
+                        {categoryList?.map((item) => (
+                            <option id={item?.id} value={item?.id}>{item?.categoryName}</option>
                         ))}
                     </Select>
                 </FormControl>

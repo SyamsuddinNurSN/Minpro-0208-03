@@ -1,16 +1,75 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Flex, Grid, GridItem, Icon, Image, Text } from "@chakra-ui/react";
 import SimpleSidebar from "../components/sidebarLeft";
 import { UserBarInfo } from "../components/userBarInfo";
-
-import coffee1 from "../assets/menuDummy/coffee-1.jpg";
 import { HiPencil } from "react-icons/hi";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { FiTag } from "react-icons/fi";
 import { FaCircleInfo } from "react-icons/fa6";
 import { RxUpdate } from "react-icons/rx";
-import { useState } from "react";
+import { BsCalendarDate } from "react-icons/bs";
+
+import { useEffect, useState } from "react";
+import { StatusProductModal } from "../components/productDetail/statusProductModal";
+import { EditProductModal } from "../components/productDetail/editProductModal";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 export const ProductDetailPage = () => {
+  const [isStatusModalOpen, setStatusModalOpen] = useState(false)
+  const [isEditModalOpen, setEditModalOpen] = useState(false)
+
+  const openStatusModal = () => {
+    setStatusModalOpen(true);
+  };
+
+  const closeStatusModal = () => {
+    setStatusModalOpen(false);
+  };
+
+  const openEditModal = () => {
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const { id } = useParams()
+  const [productData, setProductData] = useState([])
+
+  const getProductData = async () => {
+    try {
+      await axios.get(`http://localhost:2000/products/${id}`).then((response) => {
+        setProductData(response.data.result)
+      })
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Fetch the updated product data after STATUS CHANGE
+  const handleProductStatusChange = async () => {
+    await getProductData();
+  }
+
+  // Fetch the updated product data after PRODUCT EDIT
+  const handleProductEdit = async () => {
+    await getProductData();
+  }
+
+  console.log(productData);
+
+  useEffect(() => {
+    getProductData()
+  }, [])
+
+  const newStartDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   return (
     <>
@@ -19,7 +78,8 @@ export const ProductDetailPage = () => {
         <GridItem
           colSpan={{ base: "10", md: "6", lg: "7" }}
           w="full"
-          bg="#F9F8FB"
+          bg="#F6FAFEFF"
+          // bg="#F9F8FB"
           pl={{ base: "3", md: "11vw", lg: "13vw" }}
           pr={{ base: "3", md: "1", lg: "5" }}
           py="7"
@@ -29,10 +89,12 @@ export const ProductDetailPage = () => {
             <Flex>
               <Breadcrumb spacing='8px' bg="#EDF2F7 " py="0.5rem" px="0.8rem " borderRadius="lg" separator={<ChevronRightIcon color='gray.500' fontSize="1.2rem" mb="0.2rem" />}>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="product-list" fontWeight="medium" fontSize="0.9rem" textColor="#55606D">Product List</BreadcrumbLink>
+                  <Link to="/product-list">
+                    <BreadcrumbLink href="#" fontWeight="medium" fontSize="0.9rem" textColor="#55606D">Product List</BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href='#' fontSize="0.9rem" fontWeight="medium" textColor="#55606D">Caramel Macchiato</BreadcrumbLink>
+                  <BreadcrumbLink href='#' fontSize="0.9rem" fontWeight="medium" textColor="#55606D">{productData?.name}</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Flex>
@@ -47,7 +109,7 @@ export const ProductDetailPage = () => {
               boxShadow="lg"
             >
               <Image
-                src={coffee1}
+                src={`http://localhost:2000/${productData?.img}`}
                 borderRadius="xl"
                 h="18rem"
                 w={{ base: "full", lg: "20rem" }}
@@ -65,7 +127,7 @@ export const ProductDetailPage = () => {
               >
                 <Flex flexDirection="column" gap="2">
                   <Text fontWeight="bold" fontSize="1.5rem" textColor="#263238">
-                    Caramel Macchiato
+                    {productData?.name}
                   </Text>
                   <Text
                     fontWeight="medium"
@@ -73,31 +135,64 @@ export const ProductDetailPage = () => {
                     textColor="#898989"
                     mt={{ base: "2", lg: "0" }}
                   >
-                    Espresso combined with vanilla-flavoured syrup, milk and
-                    caramel sauce over ice.
+                    {productData?.description}
                   </Text>
                 </Flex>
                 <Flex flexDirection="column" gap="1">
                   <Flex alignItems="center" gap="2">
-                    <Icon as={FiTag} fontSize="1rem" textColor="#a6a6a6"></Icon>
+                    <Icon as={FiTag} fontSize="0.9rem" textColor="#a6a6a6" mb="0.2rem"></Icon>
                     <Text
                       fontWeight="medium"
-                      fontSize="1rem"
+                      fontSize="0.9rem"
                       textColor="#a6a6a6"
                     >
-                      Coffee
+                      {productData.Category?.categoryName}
                     </Text>
                   </Flex>
                   <Flex alignItems="center" gap="2">
-                    {/* CiSquareInfo */}
-                    <Icon as={FaCircleInfo} fontSize="1rem" textColor="#46C8C1" ></Icon>
+                    <Icon as={BsCalendarDate} fontSize="0.9rem" textColor="#a6a6a6" mb="0.2rem" ></Icon>
                     <Text
-                      fontWeight="semibold"
-                      fontSize="1rem"
-                      textColor="#46C8C1"
+                      fontWeight="medium"
+                      fontSize="0.9rem"
+                      textColor="#a6a6a6"
                     >
-                      Active
+                      {newStartDate(productData.createdAt)}
                     </Text>
+                  </Flex>
+                  <Flex alignItems="center" gap="2">
+                    {productData.isActive ? (
+                      <>
+                        <Icon
+                          as={FaCircleInfo}
+                          fontSize="0.9rem"
+                          textColor="#46C8C1"
+                          mb="0.1rem"
+                        ></Icon>
+                        <Text
+                          fontWeight="semibold"
+                          fontSize="0.9rem"
+                          textColor="#46C8C1"
+                        >
+                          Active
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <Icon
+                          as={FaCircleInfo}
+                          fontSize="0.9rem"
+                          textColor="#ea7b7b"
+                          mb="0.1rem"
+                        ></Icon>
+                        <Text
+                          fontWeight="semibold"
+                          fontSize="0.9rem"
+                          textColor="#ea7b7b"
+                        >
+                          Disabled
+                        </Text>
+                      </>
+                    )}
                   </Flex>
                 </Flex>
                 <Flex flexDirection={{ base: "column", lg: "row" }} justifyContent="space-between" w="full" gap={{ base: "6", lg: "0" }}>
@@ -107,7 +202,7 @@ export const ProductDetailPage = () => {
                       fontSize="1rem"
                       textColor="#898989"
                     >
-                      Stock: 20
+                      Stock: {productData?.stock}
                     </Text>
                     <Flex gap="1" alignItems="end">
                       <Text
@@ -123,13 +218,13 @@ export const ProductDetailPage = () => {
                         textColor="#4D81F1"
                         lineHeight="none"
                       >
-                        20.000
+                        {productData?.price}
                       </Text>
                     </Flex>
                   </Flex>
                   {/* Status */}
                   <Flex alignItems="end" gap="3">
-                    {/* THIS IS THE BUTTON TO OPEN THE MODAL */}
+                    {/* open modal button */}
                     <Button
                       alignItems="center"
                       bg="#f2f2f2"
@@ -142,6 +237,7 @@ export const ProductDetailPage = () => {
                       _hover={{
                         bg: "#263238",
                       }}
+                      onClick={openStatusModal}
                     >
                       <Text textColor="#808080" fontWeight="medium" _groupHover={{ textColor: "white" }}>
                         Status
@@ -160,6 +256,7 @@ export const ProductDetailPage = () => {
                       _hover={{
                         bg: "#4D81F1",
                       }}
+                      onClick={openEditModal}
                     >
                       <Text textColor="#4D81F1" fontWeight="medium" _groupHover={{ textColor: "white" }}>
                         Edit
@@ -175,7 +272,8 @@ export const ProductDetailPage = () => {
         <GridItem
           colSpan={{ md: "4", lg: "3" }}
           w="full"
-          bg="#F9F8FB"
+          bg="#F6FAFEFF"
+          // bg="#F9F8FB"
           pt={{ md: "7.5vh", lg: "45vh" }}
           pl="1.5rem"
           pr={{ md: "1.2rem", lg: "4rem" }}
@@ -183,7 +281,11 @@ export const ProductDetailPage = () => {
         >
           <UserBarInfo />
         </GridItem>
-      </Grid>
+      </Grid >
+
+      {/* ------- Rendering for Modals -------- */}
+      <StatusProductModal isOpen={isStatusModalOpen} onClose={closeStatusModal} productData={productData} onStatusUpdate={handleProductStatusChange} />
+      <EditProductModal isOpen={isEditModalOpen} onClose={closeEditModal} productData={productData} onProductEdit={handleProductEdit} />
     </>
   );
 };
