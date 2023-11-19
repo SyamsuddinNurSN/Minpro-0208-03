@@ -7,6 +7,8 @@ export const Profile = () => {
   console.log(user);
   const profilePicture = user.profile_picture;
 
+  
+
   return (
     <Box
       p={{ base: "4", md: "8" }}

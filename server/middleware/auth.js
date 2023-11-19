@@ -22,11 +22,11 @@ module.exports = {
     }
   },
   checkRole: (req, res, next) => {
-    const { role } = req.user; // Assuming that the user object contains the role information
+    const { role } = req.user; 
     console.log(role);
 
     if (role === "admin") {
-      return next(); // Continue to the next middleware or route handler
+      return next(); 
     }
     return res.status(400).send({
       message: "Unauthorized (admin only) !!",

@@ -5,6 +5,7 @@ import { RegisterUser } from "./components/Register";
 import { MenuPage } from "./pages/MenuPage";
 import { CreateProductPage } from "./pages/createProductPage";
 import { AdminPage } from "./pages/adminPage";
+
 import { Profile } from "./components/Profile/Profile";
 import { RegisterCashier } from "./components/RegisterCashier";
 import EditProfilePage from "./components/Profile/EditProfile";
@@ -20,7 +21,10 @@ import { StatusProductModal } from "./components/productDetail/statusProductModa
 import { EditProductModal } from "./components/productDetail/editProductModal";
 import { MenuCashier } from "./pages/MenuPageCashier";
 import { SalesReportPage } from "./pages/salesReportPage";
-
+import ListCashier from "./pages/listCashier";
+import ResetPasswordFormEmail from "./components/ResetPasswordemail";
+import ResetPasswordForm from "./components/ResetPassword";
+import Verify from "./pages/verify";
 
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
@@ -29,16 +33,26 @@ const router = createBrowserRouter([
   { path: "/product-list", element: <MenuPage /> },
   { path: "/create-product", element: <CreateProductPage /> },
   { path: "/admin", element: <AdminPage /> },
+
+  { path: "/product-list", element: <MenuPage /> },
+  { path: "/list-cashier", element: <ListCashier /> },
+  { path: "/create-product", element: <CreateProductPage /> },
+  { path: "/admin", element: <AdminPage /> },
   { path: "/register-cashier", element: <RegisterCashier /> },
 
   { path: "/menu-cashier", element: <MenuCashier /> },
+  { path: "/reset-password/:email", element: <ResetPasswordForm /> },
+  { path: "/resetpasswordemail", element: <ResetPasswordFormEmail /> },
   { path: "/", element: <LoginUser /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
-  { path: "/", element: <WelcomePage /> }, // Default route
+
   { path: "/product-detail/:id", element: <ProductDetailPage /> },
   { path: "/manage-category", element: <CategoryManagePage /> },
-  { path: "/sales-report", element: <SalesReportPage /> }
+  { path: "/sales-report", element: <SalesReportPage /> },
 
+  { path: "/product-detail", element: <ProductDetailPage /> },
+  // Testing Modal
+  { path: "/verify/:id", element: <Verify /> },
 ]);
 
 function App() {
@@ -48,7 +62,7 @@ function App() {
   const KeepLogin = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:2000/users/keep-login`,
+        `http://localhost:2000/users/Keep-login`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,13 +74,11 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-  }
-
+  };
 
   useEffect(() => {
     KeepLogin();
   }, []);
-
 
   return (
     <>

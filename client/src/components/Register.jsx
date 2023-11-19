@@ -19,12 +19,12 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import loginimage from "../asset/TASmart.png";
 import { Link, useNavigate } from "react-router-dom";
 
 export const RegisterUser = () => {
   const RegisterSchema = Yup.object().shape({
-    fullname: Yup.string().required("Nama tidak boleh kosong"),
+    fullname: Yup.string().required("Fullname tidak boleh kosong"),
     username: Yup.string().required("Username tidak boleh kosong"),
     email: Yup.string()
       .email("Format email salah")
@@ -36,11 +36,11 @@ export const RegisterUser = () => {
       .oneOf(
         [Yup.ref("password"), null],
         "Password harus sama dengan konfirmasi password"
-      ) // Validasi konfirmasi password
-      .required("Confirm Password tidak boleh kosong"),
-      role: Yup.string()
-    .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
-    .required("Tipe pengguna tidak boleh kosong"),
+      ) 
+      .required("Konfirmasi Password tidak boleh kosong"),
+    role: Yup.string()
+      .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
+      .required("Tipe pengguna tidak boleh kosong"),
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -50,16 +50,16 @@ export const RegisterUser = () => {
 
   const handleSubmitRegister = async (data) => {
     try {
-      console.log( data, "ini data");
       await axios.post("http://localhost:2000/users", data);
-      
-      // toast({
-      //   title: "Akun Telah Dibuat",
-      //   description: "Anda sekarang dapat menggunakan akun Anda.",
-      //   status: "success",
-      //   duration: 9000,
-      //   isClosable: true,
-      // });
+      console.log(data, "ini data");
+
+      toast({
+        title: "Akun Telah Dibuat",
+        description: "Anda sekarang dapat menggunakan akun Anda.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
 
       navigate("/");
     } catch (err) {
@@ -76,6 +76,20 @@ export const RegisterUser = () => {
         bg={useColorModeValue("gray.50", "gray.800")}
       >
         <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
+          <Stack align={"center"}>
+            <Link to={"/"}>
+              <Image
+                src={loginimage}
+                w="60px"
+                h="60px"
+                objectFit="cover"
+                alt="Logo TASmart"
+              />
+            </Link>
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              Daftar
+            </Heading>
+          </Stack>
           <Formik
             initialValues={{
               fullname: "",
@@ -104,12 +118,12 @@ export const RegisterUser = () => {
                                 {...field}
                                 type="text"
                                 placeholder="Fullname"
-                                autoComplete="new"
+                                autoComplete="off"
                               />
                             )}
                           </Field>
                           <ErrorMessage
-                            name="name"
+                            name="fullname"
                             component="div"
                             style={{ color: "red" }}
                           />
@@ -245,10 +259,10 @@ export const RegisterUser = () => {
                       <Stack spacing={10} pt={2}>
                         <Button
                           type="submit"
-                          bgGradient="linear(to-r, #000000, rgb(16, 69, 181))"
+                          bgGradient="linear(to-r, #4000, rgb(16, 69, 400))"
                           loadingText="Submitting"
                           size="lg"
-                          color={"white"}
+                          color={"black"}
                           _hover={{}}
                         >
                           Daftar
