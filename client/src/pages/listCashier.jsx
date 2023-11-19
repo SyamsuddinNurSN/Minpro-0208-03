@@ -14,14 +14,13 @@ import {
   ModalHeader,
   ModalFooter,
   ModalCloseButton,
-  
 } from "@chakra-ui/react";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { useToast } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-const Listcashier = () => {
+const ListCashier = () => {
   const [cashiers, setCashiers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -109,7 +108,6 @@ const Listcashier = () => {
         "Cashier dapat menggunakan akun."
       );
     } else {
-      
       showToast(
         "warning",
         "Cashier dinonaktifkan",
@@ -164,8 +162,8 @@ const Listcashier = () => {
           </Text>
           <Text fontWeight="semibold">Delete</Text>
         </Flex>
-        
-        <Link to= "/home">Beranda</Link>
+
+        <Link to="/home">Beranda</Link>
         {cashiers.map((cashier, index) => (
           <>
             <Flex
@@ -283,4 +281,4 @@ const Listcashier = () => {
   );
 };
 
-export default Listcashier;
+export default ListCashier;

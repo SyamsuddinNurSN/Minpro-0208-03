@@ -7,9 +7,7 @@ export const Profile = () => {
   console.log(user);
   const profilePicture = user.profile_picture;
 
-  const user = useSelector((state) => state.user.value);
-  console.log(user);
-  const profilePicture = user.profile_picture;
+  
 
   return (
     <Box
