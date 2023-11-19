@@ -1,12 +1,8 @@
-import { Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react"
-import axios, { Axios } from "axios"
+import { Box, Flex, Icon, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react"
+import axios from "axios"
 import { useEffect, useState } from "react"
+import { MdStickyNote2 } from "react-icons/md";
 
-// const transactionData = [
-//     { id: 284, date: "27 June 2023", totProducts: 5, totAmount: 54000, cashier: "cashier 1" },
-//     { id: 566, date: "24 June 2023", totProducts: 7, totAmount: 82000, cashier: "cashier 2" },
-//     { id: 224, date: "23 June 2023", totProducts: 4, totAmount: 34000, cashier: "cashier 1" },
-// ]
 
 export const TransactionHistory = () => {
     // const token = localStorage.getItem("token")
@@ -26,15 +22,23 @@ export const TransactionHistory = () => {
 
     console.log(transactionData);
 
-    const newStartDate = (date) => {
-        return new Date(date).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-        });
-    };
+    // convert date format
+    const formatDate = (dateString) => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // 
+        const date = new Date(dateString);
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = months[date.getMonth()];
+        const year = date.getFullYear().toString().slice(-2);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+
+        const formattedDate = `${day} ${month} ${year}, ${hours}:${minutes}`;
+
+        return formattedDate;
+    }
+    // convert price format
     const convertToIDR = (price) => {
         const priceStr = price.toString().split('');
 
@@ -55,12 +59,14 @@ export const TransactionHistory = () => {
             <Text fontSize="1.2rem" fontWeight="semibold" mb="1rem">
                 Transaction History
             </Text>
-            <TableContainer bg="white"
+            <TableContainer
+                bg="white"
                 px="2rem"
                 py="0.8rem"
                 borderRadius="xl"
                 border="1px"
-                borderColor="#E2E8F0">
+                borderColor="#E2E8F0"
+            >
                 <Table variant="simple" size="sm">
                     <Thead>
                         <Tr>
@@ -68,22 +74,45 @@ export const TransactionHistory = () => {
                             <Th>Date</Th>
                             <Th>Total Products</Th>
                             <Th>Total Amount</Th>
-                            <Th isNumeric>Cashier</Th>
+                            <Th>Cashier</Th>
+                            <Th isNumeric>Details</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {transactionData.map((item) => (
                             <Tr>
-                                <Td>{item.id}</Td>
-                                <Td>{newStartDate(item.createdAt)}</Td>
-                                <Td>{item.totProducts}</Td>
-                                <Td>Rp {item.total_amount}</Td>
-                                <Td isNumeric>{item.User?.fullname}</Td>
+                                <Td fontWeight="semibold" textColor="#425270">{item.id}</Td>
+                                <Td>{formatDate(item.createdAt)}</Td>
+                                <Td>{item.Transaction_details?.length}</Td>
+                                <Td>Rp {convertToIDR(item.total_amount)}</Td>
+                                <Td>{item.User?.fullname}</Td>
+                                <Td isNumeric>
+                                    <Flex justifyContent="space-between">
+                                        <Flex></Flex>
+                                        <Flex
+                                            bg="#719BF4"
+                                            p="0.3rem"
+                                            borderRadius="md"
+                                            _hover={{
+                                                bg: "#4D81F1",
+                                                cursor: "pointer",
+                                                transitionDuration: "0.4s",
+                                                transitionTimingFunction: "ease-in-out",
+                                            }}
+                                        >
+                                            <Icon
+                                                as={MdStickyNote2}
+                                                fontSize="1rem"
+                                                textColor="white"
+                                            ></Icon>
+                                        </Flex>
+                                    </Flex>
+                                </Td>
                             </Tr>
                         ))}
                     </Tbody>
                 </Table>
             </TableContainer>
         </Box>
-    )
+    );
 }
