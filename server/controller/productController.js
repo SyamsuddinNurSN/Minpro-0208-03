@@ -1,4 +1,3 @@
-const { Op } = require('sequelize');
 const db = require("../models")
 const Product = db.Product
 const Category = db.Category
@@ -64,6 +63,26 @@ module.exports = {
     },
     // http://localhost:2000/products?page=1&limit=10
     // http://localhost:2000/products?page=2&limit=10
+
+    getAllActiveProduct: async (req, res) => {
+        try {
+            const allProduct = await Product.findAll({
+                where: {
+                    isActive: true
+                },
+                include: [
+                    {
+                        model: Category,
+                        attributes: ['categoryName']
+                    }
+                ],
+            })
+            res.status(200).send({ allProduct })
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({ message: err.message })
+        }
+    },
 
     // getAllProduct: async (req, res) => {
     //     try {

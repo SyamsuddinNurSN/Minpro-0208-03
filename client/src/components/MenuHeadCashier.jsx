@@ -15,7 +15,7 @@ import { CategoryMenu } from "./categoryMenu";
 
 import { MenuGridCashier } from "./menuGridCashier";
 
-export const MenuHead = () => {
+export const MenuHeadCashier = () => {
   return (
     <VStack align="stretch" spacing={{ base: "3", lg: "6" }}>
       {/* Search bar */}

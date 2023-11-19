@@ -24,12 +24,14 @@ const {
   productRouter,
   categoryRouter,
   transactionRouter,
+  salesReportRouter,
 } = require("./router");
 
 app.use("/users", userRouter);
 app.use("/transactions", transactionRouter);
 app.use("/products", productRouter);
 app.use("/categories", categoryRouter);
+app.use("/sales-report", salesReportRouter)
 
 app.listen(PORT, () => {
   // db.sequelize.sync({ alter: true })
