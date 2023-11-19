@@ -12,17 +12,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { BsFillBoxSeamFill } from "react-icons/bs";
 import { MdShoppingCart } from "react-icons/md";
+import { TransactionHistory } from "../components/salesReport/transactionHistory";
 
 const gridReport = [
     { icon: RiMoneyDollarCircleFill, bills: "Rp 25.000.000", title: "Total Earnings", bg: "#3D05DE" },
     { icon: BsFillBoxSeamFill, bills: 200, title: "Total Product Sold", bg: "#FF6A6A" },
     { icon: MdShoppingCart, bills: 134, title: "Total Orders", bg: "#FF8759" },
-]
-
-const transactionData = [
-    { id: 284, date: "27 June 2023", totProducts: 5, totAmount: 54000, cashier: "cashier 1" },
-    { id: 566, date: "24 June 2023", totProducts: 7, totAmount: 82000, cashier: "cashier 2" },
-    { id: 224, date: "23 June 2023", totProducts: 4, totAmount: 34000, cashier: "cashier 1" },
 ]
 
 export const SalesReportPage = () => {
@@ -173,40 +168,7 @@ export const SalesReportPage = () => {
                         ))}
                     </Grid>
                     {/* Table Transaction History */}
-                    <Box>
-                        <Text fontSize="1.2rem" fontWeight="semibold" mb="1rem">
-                            Transaction History
-                        </Text>
-                        <TableContainer bg="white"
-                            px="2rem"
-                            py="0.8rem"
-                            borderRadius="xl"
-                            border="1px"
-                            borderColor="#E2E8F0">
-                            <Table variant="simple" size="sm">
-                                <Thead>
-                                    <Tr>
-                                        <Th>Transaction ID</Th>
-                                        <Th>Date</Th>
-                                        <Th>Total Products</Th>
-                                        <Th>Total Amount</Th>
-                                        <Th isNumeric>Cashier</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {transactionData.map((item) => (
-                                        <Tr>
-                                            <Td>{item.id}</Td>
-                                            <Td>{item.date}</Td>
-                                            <Td>{item.totProducts}</Td>
-                                            <Td>Rp {item.totAmount}</Td>
-                                            <Td isNumeric>{item.cashier}</Td>
-                                        </Tr>
-                                    ))}
-                                </Tbody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                    <TransactionHistory />
                 </Flex>
             </Flex>
         </>

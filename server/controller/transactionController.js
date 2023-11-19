@@ -57,11 +57,16 @@ module.exports = {
 
   getAll: async (req, res) => {
     try {
-      const transactions = await Transaction.findandCountAll({
+      const transactions = await Transaction.findAndCountAll({
         include: [
           {
             model: TransactionDetail,
-            include: [Product],
+            include: [
+              {
+                model: Product,
+                attributes: ['id', 'name', 'price', 'stock', 'categoryId']
+              }
+            ],
           },
         ],
       });

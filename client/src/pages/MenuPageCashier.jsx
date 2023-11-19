@@ -1,9 +1,9 @@
 import { Grid, GridItem, } from "@chakra-ui/react";
 import SimpleSidebar from "../components/sidebarLeft";
 import { BillsBar } from "../components/billsBar";
-import { MenuHead } from "../components/MenuHead";
+import { MenuHeadCashier } from "../components/MenuHeadCashier";
 export const MenuCashier = () => {
-  
+
   return (
     <>
       <SimpleSidebar />
@@ -22,7 +22,7 @@ export const MenuCashier = () => {
           py="7"
           pr="3vw"
         >
-          <MenuHead />
+          <MenuHeadCashier />
         </GridItem>
         {/* Bills */}
         <GridItem

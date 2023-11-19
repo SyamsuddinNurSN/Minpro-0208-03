@@ -287,6 +287,7 @@ export const MenuSlice = () => {
           <BeatLoader color="#4D81F1" margin={5} size={25} width={8} />
         </Flex>
       )}
+      {/*  */}
       <HStack mt={{ base: "2", lg: "3" }} justifyContent="space-between">
         <Text
           fontSize={{ base: "1.1rem", lg: "1.3rem" }}

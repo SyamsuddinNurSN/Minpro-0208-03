@@ -28,9 +28,8 @@ export const MenuGridCashier = () => {
   const [products, setProducts] = useState([]);
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:2000/products");
-      setProducts(response.data.allProduct.rows);
-      console.log(response.data.allProduct.rows);
+      const response = await axios.get("http://localhost:2000/products/active");
+      setProducts(response.data.allProduct);
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +74,7 @@ export const MenuGridCashier = () => {
         </Menu>
       </HStack>
       <Grid templateColumns="repeat(6, 1fr)" gap={4}>
-        {products.map((item) => (
+        {products?.map((item) => (
           <GridItem key={item.id} colSpan={{ base: "6", md: "3", lg: "2" }}>
             <VStack
               flexDirection="column"
@@ -94,14 +93,14 @@ export const MenuGridCashier = () => {
               }}
             >
               <Box
-                h="10rem"
+                h="12rem"
                 w="full"
                 mb={2}
                 overflow="hidden"
                 borderRadius="xl"
               >
                 <Image
-                  src={item.img}
+                  src={`http://localhost:2000/${item.img}`}
                   objectFit="cover"
                   transition="all .25s ease"
                   overflow="hidden"
@@ -111,10 +110,10 @@ export const MenuGridCashier = () => {
                   }}
                 />
               </Box>
-              <VStack spacing={4} alignItems="start" px={1}>
+              <VStack spacing="1rem" alignItems="start" px={1} w="full">
                 <Text fontWeight="semibold">{item.name}</Text>
                 <Text fontSize="0.8rem" textColor="#757575">
-                  {item.desc}
+                  {item.description}
                 </Text>
                 <Flex
                   flexDirection="row"
@@ -152,45 +151,6 @@ export const MenuGridCashier = () => {
             </VStack>
           </GridItem>
         ))}
-        <GridItem colSpan={{ base: "6", md: "3", lg: "2" }}>
-          <Link to="/create-product">
-            <Flex
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              role="group"
-              p={4}
-              h="full"
-              gap={4}
-              _hover={{
-                cursor: "pointer",
-                bg: "#e7eefd",
-                border: "2px",
-                borderStyle: "dashed",
-                borderColor: "#4D81F1",
-                borderRadius: "xl",
-                transitionDuration: "0.4s",
-                transitionTimingFunction: "ease-out",
-              }}
-            >
-              <Flex borderRadius="lg" p="0.6rem" bg="#e7eefd">
-                <Icon
-                  as={IoAdd}
-                  textColor="#4D81F1"
-                  fontSize="2.6rem"
-                  _groupHover={{
-                    transform: "scale(1.3)",
-                    transitionDuration: "0.4s",
-                    transitionTimingFunction: "ease-out",
-                  }}
-                ></Icon>
-              </Flex>
-              <Text fontWeight="semibold" textColor="#4D81F1" fontSize="1.1rem">
-                Add Product
-              </Text>
-            </Flex>
-          </Link>
-        </GridItem>
       </Grid>
     </>
   );
