@@ -1,28 +1,24 @@
-// Example router configuration
-
 const router = require("express").Router();
-
-// Your router configuration...
 
 const { userController } = require("../controller");
 const { checkRole, verifyToken } = require("../middleware/auth");
 const { multerUpload } = require("../middleware/multer");
 
-
-
 router.post("/", userController.registerAdmin);
 router.patch("/reset-password", userController.resetPassword);
 router.patch("/update-password", userController.updateUserPassword);
 router.delete("/delete-cashier/:id", userController.deleteCashier);
+router.patch("/verify-Cashier/:id", userController.verifyCashier);
+router.patch("/enable-Cashier/:id", userController.enableCashier);
 router.post(
   "/cashiers",
   verifyToken,
   checkRole,
   userController.registerCashier
 );
-// router.patch("/update-user", userController.editbyid);
+
 router.post("/login", userController.login);
-// router.get("/", userController.getAll)
+
 router.get("/keep-login", verifyToken, userController.keepLogin);
 router.patch(
   "/:id",

@@ -13,8 +13,6 @@ const fs = require("fs");
 const handlebars = require("handlebars");
 const user = require("../models/user");
 
-// Import model atau koneksi database yang diperlukan
-
 module.exports = {
   // Endpoint untuk registrasi admin
   registerAdmin: async (req, res) => {
@@ -76,66 +74,70 @@ module.exports = {
   login: async (req, res) => {
     try {
       let isUserExist;
+
       const { username, email, password } = req.body;
 
       if (username) {
         isUserExist = await User.findOne({
           where: {
             username,
+            // isEnabled: 1,
           },
         });
       } else if (email) {
         isUserExist = await User.findOne({
           where: {
             email,
+            // isEnabled: 1,
           },
         });
       }
 
       if (!isUserExist) {
-        return res.status(401).json({ error: "Unauthorized" });
+        return res.status(403).send({ error: "User not exist" });
       }
 
-      const passwordMatch = await bcrypt.compare(
-        password,
-        isUserExist.password
-      );
-
-      if (!passwordMatch) {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
-
-      const payload = { id: isUserExist.id, role: isUserExist.role };
-      const token = jwt.sign(payload, "LogIn");
-
-      console.log("ini user", isUserExist);
-
-      if (isUserExist.role === "admin") {
-        console.log("Admin login");
-      } else if (isUserExist.role === "cashier") {
-        console.log("Cashier login");
-      }
-
-      // const data = fs.readFileSync("./resetpassword.html", "utf-8");
-      //   const tempCompile = await handlebars.compile(data);
-      //   const tempResult = tempCompile({
-      //     createdAt: result.createdAt,
-      //     name: name,
-      //     username: username,
+      // Ini Coding Tambah Ezra
+      // else {
+      //   const isUserEnable = await User.findOne({
+      //     where: {
+      //       username,
+      //       isEnabled: 0,
+      //     },
       //   });
+      // }
 
-      // await transporter.sendMail({
-      //   from: "amanhidayat39@gmail.com",
-      //   to: email,
-      //   subject: "Email Confirmation",
-      //   html: tempResult,
-      // });
+      if (!isUserExist.isEnabled) {
+        return res.status(202).send(false);
+      } else {
+        const passwordMatch = await bcrypt.compare(
+          password,
+          isUserExist.password
+        );
 
-      res.status(200).json({
-        message: "logged in successfully",
-        result: isUserExist,
-        token,
-      });
+        console.log(isUserExist.isEnabled);
+
+        if (!passwordMatch) {
+          return res.status(402).send({ error: "Password not match" });
+        }
+
+        const payload = { id: isUserExist.id, role: isUserExist.role };
+        const token = jwt.sign(payload, "LogIn");
+
+        console.log("ini user", isUserExist);
+
+        if (isUserExist.role === "admin") {
+          console.log("Admin login");
+        } else if (isUserExist.role === "cashier") {
+          console.log("Cashier login");
+        }
+
+        res.status(200).json({
+          message: "logged in successfully",
+          result: isUserExist,
+          token,
+        });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -143,8 +145,10 @@ module.exports = {
   },
 
   registerCashier: async (req, res) => {
+    const { fullname, username, email, password } = req.body;
+
     try {
-      const { fullname, username, email, password, role } = req.body;
+      const { fullname, username, email, password } = req.body;
       const isEmailExist = await User.findOne({
         where: {
           email,
@@ -154,7 +158,6 @@ module.exports = {
       if (isEmailExist) {
         return res.status(489).send("email has been used");
       }
-
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = await User.create({
@@ -164,12 +167,26 @@ module.exports = {
         password: hashedPassword,
         role: "cashier",
       });
+      const data = fs.readFileSync("./verifiedakun.html", "utf-8");
+      const tempCompile = await handlebars.compile(data);
+      const tempResult = tempCompile({
+        createdAt: newUser.createdAt,
+        name: newUser.fullname,
+        username: username,
+        link: `http://localhost:3000/verify/${email}`,
+      });
+      
 
-      res.status(201).json({ message: "Cashier created successfully" });
+      await transporter.sendMail({
+        from: "amanhidayat39@gmail.com",
+        to: email,
+        subject: "Email Confirmation",
+        html: tempResult,
+      });
+      res.status(200).send("Register Success");
     } catch (error) {
-      console.error(error);
-
-      res.status(500).json({ error: "Internal Server Error" });
+      console.log(error);
+      res.status(400).send({ message: error });
     }
   },
   keepLogin: async (req, res) => {
@@ -192,6 +209,7 @@ module.exports = {
       const { email } = req.body;
       const data = fs.readFileSync("./resetpassword.html", "utf-8");
       const tempCompile = await handlebars.compile(data);
+      
       const tempResult = tempCompile({
         email: email,
         link: `http://localhost:3000/reset-password/${email}`,
@@ -254,48 +272,48 @@ module.exports = {
       res.status(400).send({ err: err.message });
     }
   },
-  // editById: async (req, res) => {
-  //   try {
-  //     const { isVerified } = req.body;
-  //     const user = await User.findOne({
-  //       where: {
-  //         id: req.params.id
-  //       },
-  //     });
-
-  //     if (user.isVerified===true) {
-  //       await user.update(
-
-  //       )
-  //     }
-
-  //     await user.update(updateUser);
-      
-  //     if ("isVerified" in req.body) {
-  //       user.isVerified = isVerified;
-  //     }
-
-  //     await user.update(updateUser);
-
-  //     res.status(200).send("User has been updated");
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(400).send({ message: error.message });
-  //   }
-  // },
 
   deleteCashier: async (req, res) => {
     console.log(req.params);
     try {
-        await User.destroy({
-            where: {
-                id: req.params.id,
-            },
-        });
-        res.status(200).send('Cashier Deleted');
+      await User.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      res.status(200).send("Cashier Deleted");
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-}
+  },
 
+  verifyCashier: async (req, res) => {
+    try {
+      const { isVerified } = req.body;
+      const result = await User.update(
+        { isVerified },
+        { where: { id: req.params.id } }
+      );
+
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ message: error });
+    }
+  },
+  
+  enableCashier: async (req, res) => {
+    try {
+      const { isEnabled } = req.body;
+      const result = await User.update(
+        { isEnabled },
+        { where: { id: req.params.id } }
+      );
+
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ message: error });
+    }
+  },
 };

@@ -10,7 +10,7 @@ const ResetPasswordForm = () => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast(); // Inisialisasi useToast
+  const toast = useToast(); 
 
   const handleSubmit = async (data) => {
     try {

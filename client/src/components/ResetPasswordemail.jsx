@@ -10,18 +10,32 @@ import {
   Button,
 } from "@chakra-ui/react";
 import axios from "axios"; // Import Axios
+import { useToast } from "@chakra-ui/react";
 
 const ResetPasswordForm = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const handleSubmit = async (values) => {
     try {
-      setLoading(true)
-      const response = await axios.patch("http://localhost:2000/users/reset-password", values);
+      setLoading(true);
+      const response = await axios.patch(
+        "http://localhost:2000/users/reset-password",
+        values
+      );
+
+      toast({
+        title: "Pergi ke Halaman Email",
+        description: "Tekan Tombol Reset di Email.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+
       console.log("Password reset success:", response.data);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.error("Password reset error:", error);
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -47,23 +61,29 @@ const ResetPasswordForm = () => {
                 <FormControl id="email" isRequired>
                   <FormLabel>Email</FormLabel>
                   <Field name="email">
-                            {({ field }) => (
-                              <Input
-                                {...field}
-                                type="text"
-                                placeholder="Email"
-                                autoComplete="new"
-                              />
-                            )}
-                          </Field>
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            style={{ color: "red" }}
-                          />
-                  
+                    {({ field }) => (
+                      <Input
+                        {...field}
+                        type="text"
+                        placeholder="Email"
+                        autoComplete="new"
+                      />
+                    )}
+                  </Field>
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
                 </FormControl>
-                <Button mt={4} colorScheme="blue" isLoading={loading} loadingText="loading" type="submit" width="100%">
+                <Button
+                  mt={4}
+                  colorScheme="blue"
+                  isLoading={loading}
+                  loadingText="loading"
+                  type="submit"
+                  width="100%"
+                >
                   Kirim
                 </Button>
               </Box>

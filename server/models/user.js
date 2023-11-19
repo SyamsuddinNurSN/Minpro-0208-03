@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       password: { type: DataTypes.STRING, allowNull: false },
       role: { type: DataTypes.ENUM("admin", "cashier"), allowNull: false },
       isVerified: { type: DataTypes.BOOLEAN, defaultValue: false},
-      profile_picture: { type: DataTypes.STRING, allowNull: true },
+      profile_picture: { type: DataTypes.STRING, allowNull: true},
+      isEnabled: {type: DataTypes.BOOLEAN,defaultValue: true}
     },
     {
       sequelize,

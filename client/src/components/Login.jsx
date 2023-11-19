@@ -27,9 +27,7 @@ export function LoginUser() {
     password: Yup.string()
       .min(3, "Password minimal 3 karakter")
       .required("Password tidak boleh kosong"),
-    // role: Yup.string()
-    //   .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
-    //   .required("Tipe pengguna tidak boleh kosong"),
+    
   });
 
   const toast = useToast();
@@ -47,11 +45,23 @@ export function LoginUser() {
           `http://localhost:2000/users/login`,
           data
         );
-        setUser(response.data[0]);
-        // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token);
-        navigate("/home");
-        window.location.reload();
+        console.log(response.data);
+        if (response.data == false) {
+          toast({
+            title: "Gagal Masuk",
+            description: "Akun di NonAktifkan Admin yang tampan",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          setUser(response.data[0]);
+          dispatch(setData(response.data));
+          localStorage.setItem("token", response.data?.token);
+          navigate("/home");
+          window.location.reload();
+        }
       } else {
         data.username = data.data_input;
         delete data.data_input;
@@ -59,16 +69,26 @@ export function LoginUser() {
           `http://localhost:2000/users/login`,
           data
         );
-        setUser(response.data[0]);
-        // dispatch(setData(response.data))
-        localStorage.setItem("token", response.data?.token);
-        navigate("/home");
-        window.location.reload();
+        console.log(response.data);
+        if (response.data == false) {
+          toast({
+            title: "Gagal Masuk",
+            description: "Email not verified",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          setUser(response.data[0]);
+          dispatch(setData(response.data));
+          localStorage.setItem("token", response.data?.token);
+          navigate("/home");
+          window.location.reload();
+        }
       }
     } catch (err) {
       console.log(err);
-
-  
       toast({
         title: "Gagal Masuk",
         description:
@@ -91,7 +111,13 @@ export function LoginUser() {
       <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
         <Stack align={"center"}>
           <Link to={"/"}>
-            <Image src={loginimage} w="60px" h="60px" objectFit="cover" alt="Logo TASmart" />
+            <Image
+              src={loginimage}
+              w="60px"
+              h="60px"
+              objectFit="cover"
+              alt="Logo TASmart"
+            />
           </Link>
           <Heading fontSize={"4xl"}>Masukkan Akun anda</Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
@@ -187,8 +213,6 @@ export function LoginUser() {
                               </Text>
                             </Text>
                           </Flex>
-
-                          
                         </Flex>
                         <Button
                           type="submit"

@@ -36,7 +36,7 @@ export const RegisterUser = () => {
       .oneOf(
         [Yup.ref("password"), null],
         "Password harus sama dengan konfirmasi password"
-      ) // Validasi konfirmasi password
+      ) 
       .required("Konfirmasi Password tidak boleh kosong"),
     role: Yup.string()
       .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")

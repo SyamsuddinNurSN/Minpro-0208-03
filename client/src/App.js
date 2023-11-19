@@ -21,6 +21,7 @@ import { EditProductModal } from "./components/productDetail/editProductModal";
 import ResetPasswordForm from "./components/ResetPassword";
 import ResetPasswordEmailForm from "./components/ResetPasswordemail";
 import Listcashier from "./pages/listCashier";
+import Verify from "./pages/verify";
 
 const router = createBrowserRouter([
   { path: "/home", element: <HomePage /> },
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
   // Testing Modal
   { path: "/modal", element: <StatusProductModal /> },
   { path: "/modal-2", element: <EditProductModal /> },
+  { path: "/verify/:id", element: <Verify />},
 ]);
 
 function App() {

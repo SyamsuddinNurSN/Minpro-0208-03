@@ -19,12 +19,12 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
+import loginimage from "../asset/TASmart.png";
 import { Link, useNavigate } from "react-router-dom";
 
 export const RegisterCashier = () => {
   const RegisterSchema = Yup.object().shape({
-    fullname: Yup.string().required("Nama tidak boleh kosong"),
+    fullname: Yup.string().required("Fullname tidak boleh kosong"),
     username: Yup.string().required("Username tidak boleh kosong"),
     email: Yup.string()
       .email("Format email salah")
@@ -36,7 +36,7 @@ export const RegisterCashier = () => {
       .oneOf(
         [Yup.ref("password"), null],
         "Password harus sama dengan konfirmasi password"
-      ) // Validasi konfirmasi password
+      )
       .required("Confirm Password tidak boleh kosong"),
     role: Yup.string()
       .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
@@ -45,25 +45,27 @@ export const RegisterCashier = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
+  const toast = useToast();
   const RegisterCashier = async (data) => {
     try {
-        const token = localStorage.getItem("token")
-        console.log(token);
-      console.log(data, "ini data");
-      await axios.post("http://localhost:2000/users/cashiers", data,
-      {
-        headers :{
-            Authorization: `Bearer ${token}`
-          }
-      }
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:2000/users/cashiers",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
+      console.log(response);
 
       toast({
         title: "Akun Telah Dibuat",
-        description: "Anda sebagai Kasir dapat menggunakan Akun Anda.",
+        description: "Kasir dapat menggunakan Akun.",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -72,6 +74,16 @@ export const RegisterCashier = () => {
       navigate("/home");
     } catch (err) {
       console.log(err);
+
+      if (err.response && err.response.status === 489) {
+        toast({
+          title: "Anda tidak bisa mendaftar",
+          description: "Maaf email yang anda daftarkan sudah ada",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -84,6 +96,20 @@ export const RegisterCashier = () => {
         bg={useColorModeValue("gray.50", "gray.800")}
       >
         <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
+          <Stack align={"center"}>
+            <Link to={"/"}>
+              <Image
+                src={loginimage}
+                w="60px"
+                h="60px"
+                objectFit="cover"
+                alt="Logo TASmart"
+              />
+            </Link>
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              Daftar
+            </Heading>
+          </Stack>
           <Formik
             initialValues={{
               fullname: "",
@@ -262,7 +288,6 @@ export const RegisterCashier = () => {
                           Daftar
                         </Button>
                       </Stack>
-                     
                     </Stack>
                   </Box>
                 </Form>
