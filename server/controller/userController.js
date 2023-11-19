@@ -315,5 +315,25 @@ module.exports = {
       console.log(error);
       res.status(400).send({ message: error });
     }
+  },  editProfile: async (req, res) => {
+    try {
+      const { fullname, username } = req.body
+      await User.update({
+        fullname,
+        username,
+        profile_picture: req.file?.path
+      },
+        
+        {
+          where: {
+            id: req.user.id,
+          },
+        }
+      );
+      res.status(200).send("Profile Updated");
+    } catch (error) {
+      console.log(err);
+      res.status(400).send({ err: err.message });
+    }
   },
 };

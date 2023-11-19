@@ -7,6 +7,10 @@ export const Profile = () => {
   console.log(user);
   const profilePicture = user.profile_picture;
 
+  const user = useSelector((state) => state.user.value);
+  console.log(user);
+  const profilePicture = user.profile_picture;
+
   return (
     <Box
       p={{ base: "4", md: "8" }}
@@ -18,7 +22,7 @@ export const Profile = () => {
       bg="blue.100"
       color="blue.900"
     >
-      <Heading size="xl" textAlign="center" mb="4">
+      <Heading size="xl" align="center" mb="4">
         My Profile
       </Heading>
       <Flex direction="column" align="center" textAlign="center">

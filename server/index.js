@@ -4,20 +4,30 @@ const db = require("./models");
 const cors = require("cors");
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 app.use("/public", express.static("./public"));
+
+// app.get('/cors', (req, res) => {
+//   res.send('This has CORS enabled 🎈')
+// })
 
 app.get("/api", (req, res) => {
   res.send("this is my API");
 });
 
 
-const { userRouter,productRouter, transactionRouter } = require("./router");
-app.use("/users", userRouter);
-app.use("/transactions", transactionRouter)
-app.use("/products", productRouter);
+const {
+  userRouter,
+  productRouter,
+  categoryRouter,
+  transactionRouter,
+} = require("./router");
 
+app.use("/users", userRouter);
+app.use("/transactions", transactionRouter);
+app.use("/products", productRouter);
+app.use("/categories", categoryRouter);
 
 app.listen(PORT, () => {
   // db.sequelize.sync({ alter: true })

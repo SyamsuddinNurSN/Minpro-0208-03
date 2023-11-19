@@ -72,6 +72,7 @@ export const RegisterCashier = () => {
       });
 
       navigate("/home");
+      navigate("/home");
     } catch (err) {
       console.log(err);
 

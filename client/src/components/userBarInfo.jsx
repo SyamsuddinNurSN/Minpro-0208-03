@@ -4,6 +4,8 @@ import avaDummy from "../assets/ava-dummy.png";
 import { CiSettings } from "react-icons/ci";
 
 export const UserBarInfo = () => {
+  const { token } = localStorage.getItem
+
   return (
     <Flex flexDirection={"column"}>
       {/* User */}
@@ -11,19 +13,20 @@ export const UserBarInfo = () => {
         justifyContent="space-between"
         alignItems="center"
         w="full"
-        gap={7}
         p="4"
         bg="white"
         borderRadius="xl"
       >
-        <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
-        <Flex flexDirection="column" justifyContent="start" alignItems="start">
+        <Flex>
+          <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
+        </Flex>
+        <Flex flexDirection="column" justifyContent="start" alignItems="start" flexGrow="1" ml={{ md: "0.5rem", lg: "1.4rem" }}>
           <Text color="#717171" fontSize="0.9rem">
-            I'm an Admin
+            I'm Admin
           </Text>
           <Text fontWeight="semibold">John Doe</Text>
         </Flex>
-        <Flex flexGrow="1" justifyContent="end" h="full">
+        <Flex justifyContent="end" h="full">
           <Icon
             as={CiSettings}
             h="3rem"

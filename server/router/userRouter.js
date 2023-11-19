@@ -3,6 +3,7 @@ const router = require("express").Router();
 const { userController } = require("../controller");
 const { checkRole, verifyToken } = require("../middleware/auth");
 const { multerUpload } = require("../middleware/multer");
+const { multerUpload } = require("../middleware/multer");
 
 router.post("/", userController.registerAdmin);
 router.patch("/reset-password", userController.resetPassword);

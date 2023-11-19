@@ -38,6 +38,7 @@ export function LoginUser() {
   const handleSubmitLogin = async (data) => {
     try {
       console.log(data, "ini data");
+      console.log(data, "ini data");
       if (data.data_input.includes("@")) {
         data.email = data.data_input;
         delete data.data_input;

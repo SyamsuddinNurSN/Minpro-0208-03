@@ -1,32 +1,95 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
+  ButtonGroup,
   Flex,
   GridItem,
   HStack,
   Icon,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { CiSettings } from "react-icons/ci";
-import avaDummy from "../assets/ava-dummy.png";
-
-import espressoImg from "../assets/menuDummy/espresso-1.jpg";
-
-const billsItem = [
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-  { name: "Espresso Con Panna", img: espressoImg, qty: 3, total: 60000 },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart, selectCart, updateQuantity } from "../redux/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const BillsBar = () => {
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
+  const cartItems = cart?.items ?? [];
+  const [payment, setPayment] = useState();
+  const [change, setChange] = useState(0);
+
+  const handleUpdateQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) {
+      dispatch(removeFromCart(id));
+    } else {
+      dispatch(updateQuantity({ id, quantity: newQuantity }));
+    }
+  };
+
+  const handleRemoveFromCart = (id) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const handlePaymentChange = (event) => {
+    const value = parseFloat(event.target.value);
+    setPayment(value);
+    calculateChange(value);
+  };
+
+  const calculateChange = (cashValue) => {
+    const totalAmount = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    const changeValue = cashValue - totalAmount;
+    setChange(changeValue >= 0 ? changeValue : 0);
+  };
+
+  const handleCheckout = async () => {
+    let totalPrice;
+    try {
+      totalPrice = cartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
+      const data = {
+        total_amount: totalPrice,
+        customer_amount: payment,
+        change: change,
+        cartItems: cartItems,
+      };
+
+      console.log(data);
+      const token = localStorage.getItem("token")
+      await axios.post("http://localhost:2000/transactions", data,
+      {
+        headers :{
+            Authorization: `Bearer ${token}`
+          }
+      });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <Flex
       flexDirection="column"
@@ -43,7 +106,7 @@ export const BillsBar = () => {
           w="full"
           gap={7}
         >
-          <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image>
+          {/* <Image src={avaDummy} h="3rem" w="3rem" rounded="lg"></Image> */}
           <Flex
             flexDirection="column"
             justifyContent="start"
@@ -55,20 +118,28 @@ export const BillsBar = () => {
             <Text fontWeight="semibold">John Doe</Text>
           </Flex>
           <Flex flexGrow="1" justifyContent="end" h="full">
-            <Icon
-              as={CiSettings}
-              fontSize="3rem"
-              p="0.4rem"
-              textColor="#A4A4A4"
-              _hover={{
-                transitionDuration: "0.4s",
-                transitionTimingFunction: "ease-in-out",
-                bg: "#4D81F1",
-                color: "white",
-                cursor: "pointer",
-              }}
-              rounded="lg"
-            />
+            <Menu>
+              <MenuButton>
+                <Icon
+                  as={CiSettings}
+                  h="3rem"
+                  w="3rem"
+                  p="0.4rem"
+                  textColor="#A4A4A4"
+                  _hover={{
+                    bg: "#4D81F1",
+                    color: "white",
+                  }}
+                  rounded="lg"
+                />
+              </MenuButton>
+              <MenuList>
+                <Link to="/profile">
+                  <MenuItem>Your Profile</MenuItem>
+                </Link>
+                <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+              </MenuList>
+            </Menu>
           </Flex>
         </Flex>
       </Flex>
@@ -79,11 +150,11 @@ export const BillsBar = () => {
       {/* Product map */}
       <Flex
         flexDirection="column"
-        gap="8"
+        gap="4"
         overflowY="auto"
         // flexWrap="nowrap"
         pr="0.7rem"
-        h="58vh"
+        h="49vh"
         sx={{
           "&::-webkit-scrollbar": {
             width: "4px",
@@ -98,8 +169,12 @@ export const BillsBar = () => {
           },
         }}
       >
-        {billsItem.map((item) => (
-          <Flex justifyContent="space-between" alignItems="stretch">
+        {cartItems.map((item) => (
+          <Flex
+            key={item.id}
+            justifyContent="space-between"
+            alignItems="stretch"
+          >
             <Flex alignItems="center">
               <Image
                 src={item.img}
@@ -120,16 +195,46 @@ export const BillsBar = () => {
                 {item.name}
               </Text>
               <Flex>
+                <ButtonGroup>
+                  <Button
+                    size="sm"
+                    colorScheme="teal"
+                    onClick={() =>
+                      handleUpdateQuantity(item.id, item.quantity - 1)
+                    }
+                  >
+                    -
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    colorScheme="teal"
+                    onClick={() =>
+                      handleUpdateQuantity(item.id, item.quantity + 1)
+                    }
+                  >
+                    +
+                  </Button>
+                </ButtonGroup>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() => handleRemoveFromCart(item.id)}
+                >
+                  Hapus
+                </Button>
+              </Flex>
+              <Flex>
                 <Text
                   mr="1"
                   fontWeight="medium"
                   textColor="#8A8A89"
                   fontSize="0.9rem"
                 >
-                  x
+                  {item.price} x
                 </Text>
                 <Text fontWeight="medium" fontSize="0.9rem">
-                  {item.qty}
+                  {item.quantity}
                 </Text>
               </Flex>
             </Flex>
@@ -140,11 +245,9 @@ export const BillsBar = () => {
                 fontSize="0.7rem"
                 fontWeight="semibold"
                 textColor="#8A8A89"
-              >
-                Rp
-              </Text>
+              ></Text>
               <Text fontWeight="medium" textColor="#8A8A89" fontSize="1rem">
-                {item.total}
+                {`${item.price * item.quantity}`}
               </Text>
             </Flex>
           </Flex>
@@ -162,8 +265,30 @@ export const BillsBar = () => {
         pt="3"
       >
         <Flex justifyContent="space-between">
-          <Text fontWeight="semibold">Total</Text>
-          <Text fontWeight="semibold">Rp 60.000</Text>
+          <Text fontWeight="semibold">Amount</Text>
+          <Text fontWeight="semibold">
+            {cartItems.reduce(
+              (total, item) => total + item.price * item.quantity,
+              0
+            )}
+          </Text>
+        </Flex>
+        <Flex align="center" justify="space-between">
+          <Text fontWeight="semibold">Cash</Text>
+          <input
+            type="number"
+            value={payment}
+            onChange={handlePaymentChange}
+            style={{
+              fontWeight: "semibold",
+              width: "4rem",
+              textAlign: "right",
+            }}
+          />
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text fontWeight="semibold">Change</Text>
+          <Text fontWeight="semibold">{change}</Text>
         </Flex>
         <Button
           bg="#4D81F1"
@@ -171,6 +296,7 @@ export const BillsBar = () => {
           mt={2}
           textColor="white"
           fontSize="0.9rem"
+          onClick={handleCheckout} // Add this onClick handler
           _hover={{
             bg: "#4675DB",
           }}
