@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, GridItem, HStack, Icon, Image, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { Flex, Grid, GridItem, Icon, Image, Text } from "@chakra-ui/react";
 
 import { IoAdd } from "react-icons/io5";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ export const MenuGrid = ({ productData, setProductData }) => {
         ) : (
           // Show a message or placeholder when productData is empty
           // <Text>No products available</Text>
-          <GridItem colSpan={6} mt="3rem" mb={{ base: "3rem", md: "5rem", lg: "4rem" }}>
+          <GridItem colSpan={{ base: 6, md: 3, lg: 4 }} mt="3rem" mb={{ base: "3rem", md: "5rem", lg: "4rem" }}>
             <Flex flexDirection="column" justifyContent="center" alignItems="center">
               <Image src={notFoundImg} h="12rem" w="12rem" mr="0.6rem"></Image>
               <Flex flexDirection="column" alignItems="center" gap="0.5rem">
@@ -29,7 +29,7 @@ export const MenuGrid = ({ productData, setProductData }) => {
             </Flex>
           </GridItem>
         )}
-        <GridItem colSpan={6}>
+        <GridItem colSpan={{ base: 6, md: 3, lg: 2 }}>
           <Link to="/create-product">
             <Flex
               flexDirection="column"

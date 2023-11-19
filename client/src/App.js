@@ -19,6 +19,7 @@ import { CategoryManagePage } from "./pages/categoryManagePage";
 import { StatusProductModal } from "./components/productDetail/statusProductModal";
 import { EditProductModal } from "./components/productDetail/editProductModal";
 import { MenuCashier } from "./pages/MenuPageCashier";
+import { SalesReportPage } from "./pages/salesReportPage";
 
 
 const router = createBrowserRouter([
@@ -31,11 +32,12 @@ const router = createBrowserRouter([
   { path: "/register-cashier", element: <RegisterCashier /> },
 
   { path: "/menu-cashier", element: <MenuCashier /> },
-  { path: "/profile", element: <Profile /> },
+  { path: "/", element: <LoginUser /> },
   { path: "/profile-setting", element: <EditProfilePage /> },
   { path: "/", element: <WelcomePage /> }, // Default route
   { path: "/product-detail/:id", element: <ProductDetailPage /> },
-  { path: "/manage-category", element: <CategoryManagePage /> }
+  { path: "/manage-category", element: <CategoryManagePage /> },
+  { path: "/sales-report", element: <SalesReportPage /> }
 
 ]);
 

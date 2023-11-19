@@ -129,7 +129,7 @@ export const InputEditModal = ({ onClose, productData, formik }) => {
                             type="number"
                             // variant="flushed"
                             size="sm"
-                            placeholder="10"
+                            placeholder={productData?.stock}
                             borderRadius="lg"
                         />
                         <FormHelperText textColor="#6a7a95">

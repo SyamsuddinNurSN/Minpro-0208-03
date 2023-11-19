@@ -32,7 +32,7 @@ const tabsContent = [
     img: salesImg,
     title: "Sales Report",
     desc: "keep track of your sales in one place",
-    route: "/manage-category",
+    route: "/sales-report",
   },
 ];
 

@@ -39,13 +39,22 @@ module.exports = {
 
     getAllProduct: async (req, res) => {
         try {
+            const page = parseInt(req.query.page) || 1; // Extract page parameter, default to 1 if not provided
+            const limit = parseInt(req.query.limit) || 10; // Extract limit parameter, default to 10 if not provided
+
+            const offset = (page - 1) * limit; // calculate offset
+
+            const totalCount = await Product.count()
+
             const allProduct = await Product.findAll({
                 include: [
                     {
                         model: Category,
                         attributes: ['categoryName']
                     }
-                ]
+                ],
+                limit,
+                offset, // Apply pagination parameters
             });
             res.status(200).send({ allProduct })
         } catch (err) {
@@ -53,6 +62,25 @@ module.exports = {
             res.status(400).send({ message: err.message })
         }
     },
+    // http://localhost:2000/products?page=1&limit=10
+    // http://localhost:2000/products?page=2&limit=10
+
+    // getAllProduct: async (req, res) => {
+    //     try {
+    //         const allProduct = await Product.findAll({
+    //             include: [
+    //                 {
+    //                     model: Category,
+    //                     attributes: ['categoryName']
+    //                 }
+    //             ]
+    //         });
+    //         res.status(200).send({ allProduct })
+    //     } catch (err) {
+    //         console.log(err);
+    //         res.status(400).send({ message: err.message })
+    //     }
+    // },
 
     getProductById: async (req, res) => {
         try {
@@ -96,6 +124,7 @@ module.exports = {
             res.status(400).send({ message: err.message })
         }
     },
+    // http://localhost:2000/products/category/7
 
     getProductByKeyword: async (req, res) => {
         const { keyword } = req.query
@@ -121,6 +150,7 @@ module.exports = {
             res.status(400).send({ message: err.message })
         }
     },
+    // http://localhost:2000/products/search?keyword=latte
 
     getSortedProducts: async (req, res) => {
         const { sort } = req.query;
@@ -143,6 +173,7 @@ module.exports = {
                 sortOption = [['createdAt', 'DESC']]; // Default sorting criteria
                 break;
         }
+        // http://localhost:2000/products/sort?sort=price_desc
 
         try {
             const sortedProducts = await Product.findAll({

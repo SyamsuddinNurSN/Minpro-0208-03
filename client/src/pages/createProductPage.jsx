@@ -65,6 +65,8 @@ export const CreateProductPage = () => {
           position: "top"
         })
 
+        window.location.reload()
+
       } catch (err) {
         console.log("error creating product:", err);
         toast({

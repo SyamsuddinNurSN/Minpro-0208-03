@@ -20,13 +20,16 @@ import { MenuGrid } from "./menuGrid";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import allImg from "../assets/restaurant-menu.png";
-import { BeatLoader, GridLoader } from 'react-spinners';
-import { ScaleLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ProductPagination } from "./productList/productPagination";
 
 export const MenuSlice = () => {
-  const [categoryData, setCategoryData] = useState([])
   const [productData, setProductData] = useState([])
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10) // adjust the limit
+
+  const [categoryData, setCategoryData] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(false); // Loading state react-spinners
   const [selectedSortOption, setSelectedSortOption] = useState('')
@@ -45,10 +48,13 @@ export const MenuSlice = () => {
   // Fetch all product
   const fetchAllProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:2000/products');
+      setLoading(true)
+      const response = await axios.get(`http://localhost:2000/products?page=${page}&limit=${limit}`);
       setProductData(response.data.allProduct)
+      setLoading(false)
     } catch (err) {
       console.log("Error fetching all product", err);
+      setLoading(false)
     }
   }
 
@@ -104,9 +110,6 @@ export const MenuSlice = () => {
     }
   }
 
-  console.log(productData);
-
-
   // console.log(productData);
   // console.log(categoryData);
 
@@ -116,6 +119,22 @@ export const MenuSlice = () => {
     // Fetch category data if needed
     fetchCategoryData();
   }, []);
+
+  // Trigger fetching data when page or limit changes
+  useEffect(() => {
+    fetchAllProducts();
+  }, [page, limit]);
+
+  // Functions to handle pagination controls
+  const goToNextPage = () => {
+    setPage(page + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToPreviousPage = () => {
+    setPage(page - 1 > 0 ? page - 1 : 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleAllCategoryClick = () => {
     handleCategoryClick('all')
@@ -303,6 +322,7 @@ export const MenuSlice = () => {
       </HStack>
       {/* Menu Grid */}
       <MenuGrid productData={productData} setProductData={setProductData} />
+      <ProductPagination page={page} goToNextPage={goToNextPage} goToPreviousPage={goToPreviousPage} />
     </VStack>
   );
 };

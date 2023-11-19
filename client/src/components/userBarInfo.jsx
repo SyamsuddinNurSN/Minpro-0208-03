@@ -4,6 +4,8 @@ import avaDummy from "../assets/ava-dummy.png";
 import { CiSettings } from "react-icons/ci";
 
 export const UserBarInfo = () => {
+  const { token } = localStorage.getItem
+
   return (
     <Flex flexDirection={"column"}>
       {/* User */}
