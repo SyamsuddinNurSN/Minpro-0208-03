@@ -12,7 +12,7 @@ import {
 import axios from "axios"; // Import Axios
 import { useToast } from "@chakra-ui/react";
 
-const ResetPasswordForm = () => {
+const ResetPasswordFormEmail = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const handleSubmit = async (values) => {
@@ -95,4 +95,4 @@ const ResetPasswordForm = () => {
   );
 };
 
-export default ResetPasswordForm;
+export default ResetPasswordFormEmail;
