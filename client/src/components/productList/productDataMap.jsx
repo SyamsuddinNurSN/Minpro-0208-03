@@ -26,7 +26,7 @@ export const ProductDataMap = ({ getItem }) => {
                     }}
                 >
                     <Box
-                        h="10rem"
+                        h="12rem"
                         w="full"
                         mb={2}
                         overflow="hidden"
