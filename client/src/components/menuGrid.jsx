@@ -1,3 +1,4 @@
+
 import { Flex, Grid, GridItem, Icon, Image, Text } from "@chakra-ui/react";
 
 import { IoAdd } from "react-icons/io5";
@@ -30,6 +31,7 @@ export const MenuGrid = ({ productData, setProductData }) => {
           </GridItem>
         )}
         <GridItem colSpan={{ base: 6, md: 3, lg: 2 }}>
+
           <Link to="/create-product">
             <Flex
               flexDirection="column"

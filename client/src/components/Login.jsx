@@ -10,6 +10,8 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  Image,
+  VStack,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -18,15 +20,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { setData } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import loginimage from "../asset/TASmart.png";
 
 export function LoginUser() {
   const LoginSchema = Yup.object().shape({
     password: Yup.string()
       .min(3, "Password minimal 3 karakter")
       .required("Password tidak boleh kosong"),
-    // role: Yup.string()
-    //   .oneOf(["admin", "cashier"], "Pilih tipe pengguna: admin atau cashier")
-    //   .required("Tipe pengguna tidak boleh kosong"),
+    
   });
 
   const toast = useToast();
@@ -37,6 +38,7 @@ export function LoginUser() {
   const handleSubmitLogin = async (data) => {
     try {
       console.log(data, "ini data");
+      console.log(data, "ini data");
       if (data.data_input.includes("@")) {
         data.email = data.data_input;
         delete data.data_input;
@@ -44,11 +46,23 @@ export function LoginUser() {
           `http://localhost:2000/users/login`,
           data
         );
-        setUser(response.data[0]);
-        dispatch(setData(response.data));
-        localStorage.setItem("token", response.data?.token);
-        navigate("/menu-cashier");
-        window.location.reload();
+        console.log(response.data);
+        if (response.data == false) {
+          toast({
+            title: "Gagal Masuk",
+            description: "Akun di NonAktifkan Admin yang tampan",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          setUser(response.data[0]);
+          dispatch(setData(response.data));
+          localStorage.setItem("token", response.data?.token);
+          navigate("/home");
+          window.location.reload();
+        }
       } else {
         data.username = data.data_input;
         delete data.data_input;
@@ -56,20 +70,30 @@ export function LoginUser() {
           `http://localhost:2000/users/login`,
           data
         );
-        setUser(response.data[0]);
-        dispatch(setData(response.data));
-        localStorage.setItem("token", response.data?.token);
-        navigate("/menu-cashier");
-        window.location.reload();
+        console.log(response.data);
+        if (response.data == false) {
+          toast({
+            title: "Gagal Masuk",
+            description: "Email not verified",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top",
+          });
+        } else {
+          setUser(response.data[0]);
+          dispatch(setData(response.data));
+          localStorage.setItem("token", response.data?.token);
+          navigate("/home");
+          window.location.reload();
+        }
       }
     } catch (err) {
-      console.error(err);
-
-      // Display a toast message for login failure
+      console.log(err);
       toast({
-        title: "Login Failed",
+        title: "Gagal Masuk",
         description:
-          "Email/Username or password is incorrect. Please try again.",
+          "Email/Username atau password ada yang salah. silahkan coba lagi",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -85,11 +109,20 @@ export function LoginUser() {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack w={"200vw"} spacing={8} mx={"auto"} maxW={"lg"}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Masuk ke Akun anda</Heading>
+          <Link to={"/"}>
+            <Image
+              src={loginimage}
+              w="60px"
+              h="60px"
+              objectFit="cover"
+              alt="Logo TASmart"
+            />
+          </Link>
+          <Heading fontSize={"4xl"}>Masukkan Akun anda</Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
-            Rasakan kemudahan dengan semua fitur canggih kami ✨
+            Selamat Datang di TASmart 👋😁
           </Text>
         </Stack>
         <Box
@@ -119,7 +152,7 @@ export function LoginUser() {
                               {...field}
                               type="text"
                               placeholder="Email/Username"
-                              autoComplete="new"
+                              autoComplete="off"
                             />
                           )}
                         </Field>
@@ -162,23 +195,30 @@ export function LoginUser() {
                           style={{ color: "red" }}
                         />
                       </FormControl> */}
-                      <Stack spacing={10}>
-                        <Stack
-                          direction={{ base: "column", sm: "row" }}
-                          align={"start"}
+                      <Stack spacing={10} mt="5">
+                        <Flex
+                          direction={{ base: "column", sm: "column" }}
+                          align="stretch"
                           justify={"space-between"}
+                          gap="3"
                         >
-                          <Text align={"center"}>Belum punya akun? </Text>
-                          <Text>
-                            <Text as={Link} to="/register" color={"red.400"}>
-                              Daftar
+                          <Flex justify={"space-between"}>
+                            <Text align={"center"}>Lupa password? </Text>
+                            <Text>
+                              <Text
+                                as={Link}
+                                to="/resetpasswordemail"
+                                color={"blue.400"}
+                              >
+                                Reset
+                              </Text>
                             </Text>
-                          </Text>
-                        </Stack>
+                          </Flex>
+                        </Flex>
                         <Button
                           type="submit"
-                          bgGradient="linear(to-r, #000000, #FF0000)"
-                          color={"white"}
+                          bgGradient="linear(to-r,rgb(16, 69, 181), #fff)"
+                          color={"black"}
                           _hover={{}}
                         >
                           Masuk
